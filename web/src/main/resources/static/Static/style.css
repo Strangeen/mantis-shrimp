@@ -1,0 +1,137 @@
+* {
+	padding: 0;
+	margin: 0;
+	text-decoration: none;
+	list-style: none;
+	font-family: "微软雅黑";
+	font-size: 14px;
+}
+#login {
+	text-align: center;
+	padding-top: 80px;
+}
+#login #login_tit {
+	font-size: 30px;
+	color: #333;
+	font-weight: bold;
+	padding-bottom: 30px;
+	color: brown;
+}
+#login form {
+	margin: 0 auto;
+}
+#login p {
+	padding: 10px 0;
+}
+#login p input {
+	color: #666;
+}
+#login p.in input {
+	font-size: 26px;
+	line-height: 50px;
+	width: 300px;
+	text-align: center;
+	border: none;
+	border-bottom: 1px solid #ccc;
+}
+#login p.go {
+	padding-top: 50px;
+}
+#login p.go input {
+	font-size: 20px;
+	line-height: 40px;
+	width: 300px;
+	background: none;
+	border: 1px solid green;
+}
+#login p.go input:hover {
+	cursor: hand;
+}
+#main {
+	padding: 20px;
+	width: 800px;
+}
+#greeting {
+	display: none;
+	font-weight: bold;
+	font-size: 24px;
+	line-height: 40px;
+	padding-bottom: 20px;
+}
+#nav {
+	padding-left: 10px;
+}
+#nav li {
+	list-style: none;
+	float: left;
+	padding-right: 7px;
+}
+#nav li a {
+	color: black;
+	min-width: 60px;
+	padding: 0 20px;
+	line-height: 30px;
+	display: block;
+	border: 1px solid #aaa;
+	border-bottom: none;
+	text-align: center;
+	background: #cecece;
+}
+#nav li a:hover {
+	background: #eee;
+}
+#nav li#you_are_too_tired a {
+	background: none;
+	border: none;
+}
+#nav li#you_are_too_tired a:hover {
+	background: none;
+}
+#nav li#soft_name a {
+	background: red;
+	color: white;
+	font-weight: bold;
+}
+#nav li#mantis_shrimp a {
+	background: #00441f;
+	color: white;
+}
+#nav li#mantis_shrimp a:hover {
+	background: green;
+	color: white;
+}
+#nav li#delete_today a:hover {
+	background: red;
+	color: white;
+}
+#nav li a.selected {
+	background: white!important;
+	color: black!important;
+	z-index: 9;
+	position: relative;
+}
+#content {
+	clear: both;
+	border: 1px solid #aaa;
+	position: relative;
+	padding: 30px;
+	position: relative;
+	top: -1px;
+	height: 450px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+#nav li#lets_go {
+	float: right;
+}
+#nav li#lets_go a {
+	border: 1px solid #ccc;
+	border-bottom: none;
+	background: #eee;
+	color: black;
+	line-height: 30px;
+}
+#nav li#lets_go a:hover {
+	color: white;
+	background: red;
+}

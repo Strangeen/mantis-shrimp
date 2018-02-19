@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/template::header"></head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel" style="padding-bottom: 20px; text-align: center" th:text="#{ms.login.logo}"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style="text-align: center;" th:text="#{ms.login.title}"></h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" action="/doLogin.ms" method="post">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" th:placeholder="#{ms.login.account}" name="account" type="text" th:value="${account}">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" th:placeholder="#{ms.login.password}" name="password" type="password" value="">
+                            </div>
+                            <input type="submit" th:value="#{ms.login.submit.btn}" class="btn btn-lg btn-success btn-block">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4" th:if="${errorMsgCode != null}" th:text="#{|ms.login.errorMsg.${errorMsgCode}|}"></div>
+    </div>
+</div>
+
+<div th:replace="common/template::footer"></div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+spring:
+  main:
+    banner-mode: "off"
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test/project/mantis-shrimp/database
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+  thymeleaf:
+    mode: LEGACYHTML5
+  messages:
+    fallbackToSystemLocale: false
+#  view:
+#    prefix: /WEB-INF/views/
+#    suffix: .jsp
+logging:
+  level:
+    root: info
+# path: D:/test/springboot/log.log

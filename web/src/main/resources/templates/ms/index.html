@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/template::header"></head>
+<body>
+<div id="wrapper">
+
+    <nav th:replace="common/template::nav"></nav>
+
+    <!-- BODY -->
+    <div id="page-wrapper">
+        <!-- Page Crumbs -->
+        <div class="container-title" style="padding: 10px 0;">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>
+
+        <h4><i class="fa fa-circle-o"></i> 皮皮虾，干活儿了</h4>
+        <!-- control button -->
+        <div class="row" id="console-plate">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p style="line-height: 40px;">
+                            <button type="button" class="btn btn-outline btn-success" onclick="getImage()">今天<?= date("m.d")?></button>
+                            <button type="button" class="btn btn-outline btn-info"  onclick="getImage(1)">昨天<?= date("m.d" ,strtotime("-1 day"))?></button>
+                            <button type="button" class="btn btn-outline btn-warning"  onclick="getImage(2)">前天<?= date("m.d", strtotime("-2 day"))?></button>
+                            <button type="button" class="btn btn-danger" onclick="deleteToday()">删除今天</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<div th:replace="common/template::footer"></div>
+</body>
+</html>
