@@ -1,6 +1,6 @@
 package online.dinghuiye.mantisshrimp.interceptor;
 
-import online.dinghuiye.mantisshrimp.consts.Consts;
+import online.dinghuiye.mantisshrimp.consts.MsParam;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,7 +14,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if (httpServletRequest.getSession().getAttribute(Consts.user_session_key) == null) {
+        if (httpServletRequest.getSession().getAttribute(MsParam.user_session_key) == null) {
             httpServletResponse.sendRedirect("/login.ms");
             return false;
         }

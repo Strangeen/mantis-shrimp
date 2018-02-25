@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <parent>
         <artifactId>mantis-shrimp</artifactId>
         <groupId>online.dinghuiye</groupId>
@@ -11,11 +12,23 @@
 
     <artifactId>web</artifactId>
 
+    <properties>
+        <project.version>1.0.0</project.version>
+    </properties>
+
+
     <dependencies>
+
+        <dependency>
+            <groupId>online.dinghuiye</groupId>
+            <artifactId>coremanager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>online.dinghuiye</groupId>
             <artifactId>bing-collection</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

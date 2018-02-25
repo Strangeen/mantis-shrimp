@@ -78,3 +78,9 @@ buildNumber.properties
 
 
 # End of https://www.gitignore.io/api/maven,intellij+iml
+
+.idea/*
+.mvn/*
+config/*
+bingcollection/**/hibernate.cfg.xml
+bingcollection/**/format.json

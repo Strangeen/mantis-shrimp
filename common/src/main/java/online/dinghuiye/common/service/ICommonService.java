@@ -64,5 +64,5 @@ public interface ICommonService<DAOT extends JpaRepository<OT, IDT> & JpaSpecifi
 
     void deleteAll();
 
-    //OT update(OT entity);
+    OT update(OT entity);
 }

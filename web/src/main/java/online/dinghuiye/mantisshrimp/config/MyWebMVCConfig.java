@@ -1,7 +1,10 @@
 package online.dinghuiye.mantisshrimp.config;
 
 import online.dinghuiye.mantisshrimp.interceptor.LoginInterceptor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -9,12 +12,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Strangeen on 2018/02/19
  */
 @Configuration
+//@ConditionalOnExpression("'${ms.devMode}'!='true'")
 public class MyWebMVCConfig extends WebMvcConfigurerAdapter {
+
+    @Value("${ms.devMode}")
+    private String devMode;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login.ms", "/doLogin.ms");
+        if (!"true".equals(devMode))
+            registry.addInterceptor(new LoginInterceptor())
+                    .addPathPatterns("/**")
+                    .excludePathPatterns("/login.ms", "/doLogin.ms");
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        super.addFormatters(registry);
+        registry.addFormatter(getDateFormatter());
+    }
+
+    @Bean
+    public DateFormatter getDateFormatter() {
+        return new DateFormatter();
     }
 }

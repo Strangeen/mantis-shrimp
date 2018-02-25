@@ -13,6 +13,7 @@ public class Starters {
 
     private static final Logger logger = LoggerFactory.getLogger(Starters.class);
 
+
     public static void startH2Server() {
         try {
             Server h2Server = Server.createTcpServer().start();

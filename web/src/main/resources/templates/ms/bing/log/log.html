@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/template::header"></head>
+<body>
+<div id="wrapper">
+
+    <nav th:replace="common/template::nav"></nav>
+
+    <!-- BODY -->
+    <div id="page-wrapper">
+        <!-- Page Crumbs -->
+        <div class="container-title">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header"><i class="fa fa-user"></i> 日志记录</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p>只显示前面30条log</p>
+            </div>
+        </div>
+
+        <div class="row" id="console-plate">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>时间</th>
+                                <th>结果</th>
+                                <th>类型</th>
+                                <th>信息</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="log : ${logs}">
+                                <td th:text="${log.id}"></td>
+                                <!--<td th:text="${#dates.format(log.pullTime,'yyyy-MM-dd HH:mm:ss')}"></td>-->
+                                <td th:text="${{log.pullTime}}"></td>
+                                <td th:text="${log.result}"></td>
+                                <td th:text="${log.type}"></td>
+                                <td th:text="${log.msg}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(logs)}">
+                                <td colspan="5" th:text="#{bing.log.list.empty.tip}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- /panel -->
+            </div>
+        </div>
+    </div> <!-- /#page-wrapper -->
+
+</div> <!-- /#wrapper -->
+
+<div th:replace="common/template::footer"></div>
+</body>
+
+</html>

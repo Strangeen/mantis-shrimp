@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/template::header"></head>
+<body>
+<div id="wrapper">
+
+    <nav th:replace="common/template::nav"></nav>
+
+    <!-- BODY -->
+    <div id="page-wrapper">
+        <!-- Page Crumbs -->
+        <div class="container-title">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header"><i class="fa fa-user"></i> 账号管理 > 账号保存</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="console-plate">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form role="form" th:action="@{/account/doSave.ms}" method="post">
+
+                            <div class="form-group">
+                                <label>账号</label>
+                                <input class="form-control" name="account" th:value="${acc?.account}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>密码</label>
+                                <input class="form-control" name="password" th:value="${acc?.password}" type="password">
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-outline btn-warning">提交</button>
+                            </div>
+
+                            <input class="form-control" name="id" type="hidden" th:value="${acc?.id}">
+
+                        </form>
+                    </div> <!-- /panel-body -->
+                </div> <!-- /panel -->
+            </div>
+        </div>
+    </div> <!-- /#page-wrapper -->
+
+</div> <!-- /#wrapper -->
+
+<div th:replace="common/template::footer"></div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/template::header"></head>
+<body>
+<div id="wrapper">
+
+    <nav th:replace="common/template::nav"></nav>
+
+    <!-- BODY -->
+    <div id="page-wrapper">
+        <!-- Page Crumbs -->
+        <div class="container-title">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header"><i class="fa fa-user"></i> 账号管理</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-outline btn-success" onclick="window.location.href='/account/create.ms'" th:text="#{ms.oper.create}">添加</button>
+            </div>
+        </div>
+
+        <div class="row" id="console-plate">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>账号</th>
+                                <th>密码</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="acc : ${accs}">
+                                <td th:text="${acc.id}"></td>
+                                <td th:text="${acc.account}"></td>
+                                <td th:text="${acc.password}"></td>
+                                <td>
+                                    <button type="button" class="btn btn-outline btn-info" th:onclick="'window.location.href=\'/account/update.ms?id=' + ${acc.id} + '\''" th:text="#{ms.oper.update}">修改</button>
+                                    <button type="button" class="btn btn-danger" th:onclick="'delAccount(' + ${acc.id} + ')'" th:text="#{ms.oper.delete}">删除</button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(accs)}">
+                                <td colspan="4" th:text="#{ms.account.list.empty.tip}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- /panel -->
+            </div>
+        </div>
+    </div> <!-- /#page-wrapper -->
+
+</div> <!-- /#wrapper -->
+
+<div th:replace="common/template::footer"></div>
+</body>
+
+<script th:inline="javascript">
+    function delAccount(id) {
+        if (window.confirm([[#{ms.account.delete.tip}]])) {
+            window.location.href = '/account/doDelete.ms?id=' + id;
+        }
+    }
+</script>
+</html>

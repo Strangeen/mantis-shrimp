@@ -1,4 +1,4 @@
-package online.dinghuiye.mantisshrimp.controller.ms;
+package online.dinghuiye.mantisshrimp.ms.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;

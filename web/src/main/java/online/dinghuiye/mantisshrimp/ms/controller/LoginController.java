@@ -1,7 +1,9 @@
-package online.dinghuiye.mantisshrimp.controller.ms;
+package online.dinghuiye.mantisshrimp.ms.controller;
 
 import online.dinghuiye.common.pojo.MsAccountEntity;
-import online.dinghuiye.mantisshrimp.consts.Consts;
+import online.dinghuiye.mantisshrimp.consts.MsParam;
+import online.dinghuiye.service.MsAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,9 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/")
 public class LoginController {
 
+    @Autowired
+    private MsAccountService accountService;
+
     @RequestMapping(value = "/login.ms", method = RequestMethod.GET)
     public String login() {
         return "ms/login";
@@ -23,8 +28,10 @@ public class LoginController {
 
     @RequestMapping(value = "/doLogin.ms", method = RequestMethod.POST)
     public String doLogin(MsAccountEntity account, HttpSession session, Model model) {
-        if ("admin".equals(account.getAccount()) && "123".equals(account.getPassword())) {
-            session.setAttribute(Consts.user_session_key, true);
+        MsAccountEntity account0 = accountService.findFirstBySample(account);
+        if (account0 != null) {
+            account0.setPassword(null);
+            session.setAttribute(MsParam.user_session_key, account0);
             return "redirect:/";
         }
         model.addAttribute("errorMsgCode", "accountNotFound");
@@ -33,10 +40,9 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/logout.ms", method = RequestMethod.GET)
-    public String logout() {
-
-        // TODO: 登出
-        return "redirect:/";
+    public String logout(HttpSession session) {
+        session.removeAttribute(MsParam.user_session_key);
+        return "redirect:/login.ms";
     }
 
 }

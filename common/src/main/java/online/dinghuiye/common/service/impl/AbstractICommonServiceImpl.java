@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,10 +18,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Strangeen on 2018/02/19
@@ -121,6 +119,11 @@ public class AbstractICommonServiceImpl<DAOT extends JpaRepository<OT, IDT> & Jp
     }
 
     @Override
+    public OT update(OT entity) {
+        return dao.save(entity);
+    }
+
+    @Override
     public void deleteAll() {
         dao.deleteAllInBatch();
     }
@@ -135,7 +138,12 @@ public class AbstractICommonServiceImpl<DAOT extends JpaRepository<OT, IDT> & Jp
                     field.setAccessible(true);
                     Object fieldVal = field.get(sample);
                     if (fieldVal != null) {
-                        predicates.add(cb.equal(root.get(field.getName()), fieldVal));
+                        if (fieldVal instanceof String) {
+                            if (!"".equals(((String)fieldVal).trim()))
+                                predicates.add(cb.like(root.get(field.getName()), "%" + (String) fieldVal + "%"));
+                        } else {
+                            predicates.add(cb.equal(root.get(field.getName()), fieldVal));
+                        }
                     }
                 }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));

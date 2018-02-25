@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/template::header"></head>
+<body>
+<div id="wrapper">
+
+    <nav th:replace="common/template::nav"></nav>
+
+    <!-- BODY -->
+    <div id="page-wrapper">
+        <!-- Page Crumbs -->
+        <div class="container-title">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header" th:inline="text"><i class="fa fa-user"></i> 图片预览</h1>
+                </div>
+            </div>
+        </div>
+
+        <form role="form" th:action="@{/bing}" method="get">
+            <!-- search -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default" style="border: 1px solid #ddd;">
+                        <div class="panel-body">
+
+                            <div class="row">
+
+                                <div class="col-md-1"><label style="line-height: 35px">图片标题</label></div>
+                                <div class="col-md-3"><input class="form-control" name="bTitle"
+                                                             th:placeholder="#{bing.photo.search.title.tip}"
+                                                             th:value="${queryItem?.bTitle}"></div>
+
+                                <div class="col-md-1"><label style="line-height: 35px">图片日期</label></div>
+                                <div class="col-md-3"><input class="form-control" name="bDate"
+                                                             th:placeholder="#{bing.photo.search.date.tip}"
+                                                             th:value="${queryItem?.bDate}"></div>
+
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-outline btn-warning"
+                                            th:text="#{ms.oper.search}">搜索
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- photo -->
+            <div class="row" id="console-plate">
+                <div class="col-md-12">
+
+                    <div th:if="${itemPage.numberOfElements <= 0}" th:text="#{bing.photo.list.empty.tip}"></div>
+
+                    <div class="row" th:each="row : ${#numbers.sequence(1, rowNum)}">
+                        <div th:class="'col-lg-' + ${12 / colNum}" th:each="item,stat : ${itemPage}"
+                             th:if="${stat.count > colNum * (row - 1) && stat.count <= row * colNum}">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="">
+                                    <span th:text="${item.bTitle + ' | ' + item.bDate}"></span>
+                                    <span class="del-icon" th:onclick="'delItem(' + ${item.id} + ')'"><i
+                                            class="fa fa-times"></i></span>
+                                </div>
+                                <div class="panel-body photo-panel-body">
+                                    <img th:src="${item.smallImgUrl}" width="100%">
+                                </div>
+                                <div class="panel-footer">
+                                    <a th:href="${item.imgCopyrightLink}" target="_blank"
+                                       th:text="${item.imgCopyright}"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- page -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default" style="border: 1px solid #ddd;">
+                        <div class="panel-body">
+                            <div class="row" th:inline="text">
+                                <div class="col-md-2 col-md-offset-8" style="line-height:35px;text-align:right;">
+                                    第[[${itemPage.number + 1}]]页 / 共[[${itemPage.totalPages}]]页
+                                </div>
+                                <div class="col-md-1" style="padding-right:0">
+                                    <input class="form-control" name="page"
+                                           th:placeholder="#{bing.photo.page.fill.tip}">
+                                </div>
+                                <div class="col-md-1" style="padding-left:5px">
+                                    <button type="submit" class="btn btn-outline btn-warning" th:text="#{ms.oper.jump}">
+                                        跳转
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- create -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default" style="border: 1px solid #ddd; padding: 10px;">
+                    <div class="panel-body">
+                        <form role="form" th:action="@{/bing/create.ms}" method="post">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label style="line-height: 35px;float:left;padding-right:10px;">手动采集</label>
+                                    <input class="form-control" name="date" style="width: 70%"
+                                           th:placeholder="#{bing.photo.create.tip} + ' (' + ${dateFormat} + ')'">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-outline btn-warning"
+                                            th:text="#{ms.oper.submit}">提交
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /#page-wrapper -->
+
+</div> <!-- /#wrapper -->
+
+<div th:replace="common/template::footer"></div>
+</body>
+<style>
+    .panel-default {
+        border: 0;
+    }
+
+    .photo-panel-body {
+        padding: 0 !important;
+    }
+
+    .panel-heading {
+        border: 1px solid #ddd;
+        border-bottom: 0;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        position: relative;
+    }
+
+    .panel-heading .del-icon {
+        position: absolute;
+        top: -13px;
+        right: -10px;
+    }
+
+    .panel-heading .del-icon .fa {
+        font-size: 24px;
+        color: #757575;
+    }
+
+    .panel-heading .del-icon .fa:hover {
+        color: #e40707;
+        cursor: pointer;
+    }
+
+    .panel-footer {
+        border: 1px solid #ddd;
+        border-top: 0;
+    }
+</style>
+
+<script th:inline="javascript">
+    function delItem(id) {
+        if (window.confirm([[#{bing.photo.delete.tip}]])) {
+            window.location.href = '/bing/doDelete.ms?id=' + id;
+        }
+    }
+</script>
+</html>

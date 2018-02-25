@@ -46,7 +46,7 @@
     <!-- header small icon buttons -->
     <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
-            <a href="/logout.do" th:utext="'<i class=\'fa fa-power-off\'></i> ' + #{ms.logout.btn}"></a>
+            <a href="/logout.ms" th:utext="'<i class=\'fa fa-power-off\'></i> ' + #{ms.logout.btn}"></a>
         </li>
         <!-- /.dropdown -->
     </ul>
@@ -57,23 +57,26 @@
         <div class="sidebar-nav navbar-collapse"><!-- collapse -->
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="javascript:;" class="menu-item"><i class="fa fa-desktop"></i> 控制台</a>
+                    <a href="/" class="menu-item"><i class="fa fa-desktop"></i> 控制台</a>
                 </li>
                 <li>
-                    <a href="javascript:;" class="menu-item"><i class="fa fa-user"></i> 账号管理</a>
+                    <a href="/account" class="menu-item"><i class="fa fa-user"></i> 账号管理</a>
                 </li>
                 <li>
                     <a href="javascript:;" class="menu-item"><i class="fa fa-bug"></i> Bing图片采集系统</a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="return false"><i class="fa fa-photo"></i> 图片预览</a>
+                            <a href="/bing"><i class="fa fa-photo"></i> 图片预览</a>
                         </li>
                         <li>
-                            <a href="return false"><i class="fa fa-th-list"></i> 日志记录</a>
+                            <a href="/bing/log"><i class="fa fa-th-list"></i> 日志记录</a>
+                        </li>
+                        <!--<li>
+                            <a href="javascript:;"><i class="fa fa-rss"></i> 订阅用户管理</a>
                         </li>
                         <li>
-                            <a href="return false"><i class="fa fa-rss"></i> 订阅用户管理</a>
-                        </li>
+                            <a href="javascript:;"><i class="fa fa-wrench"></i> 设置</a>
+                        </li>-->
                     </ul>
                 </li>
             </ul>
@@ -91,6 +94,12 @@
     <!-- <script src="Static/component/metisMenu/metisMenu.min.js"></script> -->
     <!-- Custom Theme JavaScript -->
     <script src="/Static/js/sb-admin-2.min.js"></script>
+
+    <style>
+        td {
+            vertical-align: middle!important;
+        }
+    </style>
 </div>
 
 </body>
