@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * @author Strangeen on 2018/01/09
  */
 @Component("bingConsts")
-@ConfigurationProperties(prefix = "ms.consts.bing")
+@ConfigurationProperties(prefix = "ms.setting.bing")
 public class BingParam {
 
     public static int log_page_size = 30;
@@ -31,6 +31,18 @@ public class BingParam {
 
     public static int bing_photo_list_col_num; // 4
 
+    public static String manage_mail;
+
+    public static String to_mail;
+
+    public static String send_when_by_hand;
+
+    public static String acquire_cron;
+
+    public static void setLog_page_size(int log_page_size) {
+        BingParam.log_page_size = log_page_size;
+    }
+
     public static void setBing_url(String bing_url) {
         BingParam.bing_url = bing_url;
     }
@@ -44,13 +56,15 @@ public class BingParam {
     }
 
     public static void setBing_img_save_path(String bing_img_save_path) {
-        if (bing_img_save_path != null && !bing_img_save_path.endsWith("/"))
-            bing_img_save_path = bing_img_save_path + "/";
         BingParam.bing_img_save_path = bing_img_save_path;
     }
 
     public static void setBing_img_folder_format(String bing_img_folder_format) {
         BingParam.bing_img_folder_format = bing_img_folder_format;
+    }
+
+    public static void setBing_date_format(String bing_date_format) {
+        BingParam.bing_date_format = bing_date_format;
     }
 
     public static void setBing_img_prefix(String bing_img_prefix) {
@@ -65,7 +79,19 @@ public class BingParam {
         BingParam.bing_photo_list_col_num = bing_photo_list_col_num;
     }
 
-    public static void setBing_date_format(String bing_date_format) {
-        BingParam.bing_date_format = bing_date_format;
+    public static void setManage_mail(String manage_mail) {
+        BingParam.manage_mail = manage_mail;
+    }
+
+    public static void setTo_mail(String to_mail) {
+        BingParam.to_mail = to_mail;
+    }
+
+    public static void setSend_when_by_hand(String send_when_by_hand) {
+        BingParam.send_when_by_hand = send_when_by_hand;
+    }
+
+    public static void setAcquire_cron(String acquire_cron) {
+        BingParam.acquire_cron = acquire_cron;
     }
 }

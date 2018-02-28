@@ -48,6 +48,8 @@ public class BingImgSaver {
      */
     protected void pullFile(String fileUrl, File dest) {
 
+        InputStream is = null;
+        FileOutputStream fos = null;
         try {
             URL url = new URL(fileUrl);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -55,10 +57,10 @@ public class BingImgSaver {
             conn.setConnectTimeout(3*1000);
             // 防止屏蔽程序抓取而返回403错误
             conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-            InputStream is = conn.getInputStream();
+            is = conn.getInputStream();
 
             if (!dest.getParentFile().exists()) dest.getParentFile().mkdirs();
-            FileOutputStream fos = new FileOutputStream(dest);
+            fos = new FileOutputStream(dest);
             byte[] buf = new byte[8 * 1024];
             int len = 0;
             while ((len = is.read(buf)) > -1) {
@@ -67,6 +69,13 @@ public class BingImgSaver {
         } catch (Exception e) {
             logger.error("下载文件失败", e);
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if (is != null) is.close();
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

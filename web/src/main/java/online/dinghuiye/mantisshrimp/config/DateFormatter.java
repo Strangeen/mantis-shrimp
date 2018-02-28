@@ -1,8 +1,7 @@
 package online.dinghuiye.mantisshrimp.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import online.dinghuiye.mantisshrimp.consts.MsParam;
 import org.springframework.format.Formatter;
-import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,16 +13,16 @@ import java.util.Locale;
  */
 public class DateFormatter implements Formatter<Date> {
 
-    @Value("${ms.consts.common.date_time_format}")
-    private String format;
+//    @Value("${ms.consts.common.date_time_format}")
+//    private String format;
 
     @Override
     public Date parse(String s, Locale locale) throws ParseException {
-        return new SimpleDateFormat(format).parse(s);
+        return new SimpleDateFormat(MsParam.date_time_format).parse(s);
     }
 
     @Override
     public String print(Date date, Locale locale) {
-        return new SimpleDateFormat(format).format(date);
+        return new SimpleDateFormat(MsParam.date_time_format).format(date);
     }
 }

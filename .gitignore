@@ -81,6 +81,9 @@ buildNumber.properties
 
 .idea/*
 .mvn/*
-config/*
+application.yml
 bingcollection/**/hibernate.cfg.xml
 bingcollection/**/format.json
+table_structure/*
+*.log
+mvnw*

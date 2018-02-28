@@ -1,64 +1,60 @@
-ms:
-  setting:
-    mngMail: xxx@xxx.com
-    toMail: xxx1@xxx.com,xxx2@xxx.com,xxx3@xxx.com
-  devMode: true
-  consts:
-    common:
-      page_size: 16
-      date_format: yyyyMMdd
-      date_time_format: yyyy-MM-dd HH:mm:ss
-    bing:
-      bing_url: http://bing.com
-      bing_desc_interface_url: http://cn.bing.com/cnhp/life?currentDate=
-      bing_img_interface_url: http://cn.bing.com/HPImageArchive.aspx?format=js&n=1&video=1&idx=
-      bing_img_save_path: D:/test/upload
-      bing_img_folder_format: yyyyMM
-      bing_date_format: yyyyMMdd
-      bing_img_prefix: bing
-      bing_small_img_width: 600
-#      图片展示页面一行显示的数量，必须满足 12 % x == 0
-      bing_photo_list_col_num: 4
-
-server:
-  port: 9001
-
-web:
-# 静态访问目录
-  upload-path: D:/test/upload
-
-spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/test/database
-    username: sa
-    password:
-  mail:
-    host: smtp.xxx.com
-    username: xxx@xxx.com
-    password: xxxxxx
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-  jpa:
-    show-sql: true
-    generate-ddl: true
-    hibernate:
-      ddl-auto: none
-  thymeleaf:
-    mode: LEGACYHTML5
-  messages:
-#   不设置为false为调用当地Local，无法加载默认的message.properties文件了
-    fallbackToSystemLocale: false
-  main:
-    banner-mode: "off"
-  resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
-
-logging:
-  level:
-    root: info
-  path: D:/test/ms-log.log
+#ms:
+#  setting:
+#    common:
+#      dev_mode: true
+#      page_size: 16
+#      date_format: yyyyMMdd
+#      date_time_format: yyyy-MM-dd HH:mm:ss
+#    bing:
+#      manage_mail: xxx@xxx.com
+#      to_mail: xxx@xxx.com,xxx@xxx.com
+##      acquire_cron: 0 0 10 * * ?
+#      send_when_by_hand: false
+#      bing_img_save_path: D:/test/upload
+#      bing_url: http://bing.com
+#      bing_desc_interface_url: http://cn.bing.com/cnhp/life?currentDate=
+#      bing_img_interface_url: https://www.bing.com/HPImageArchive.aspx?format=js&n=1&pid=hp&mkt=zh-CN&video=1&idx=
+#      bing_img_folder_format: yyyyMM
+#      bing_date_format: yyyyMMdd
+#      bing_img_prefix: bing
+#      bing_small_img_width: 600
+#      bing_photo_list_col_num: 4
+#
+#server:
+#  port: 9001
+#
+#spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/D:/test/data/database
+#    username: sa
+#    password:
+#  mail:
+#    host: smtp.xxx.com
+#    username: xxx@xxx.com
+#    password: xxx
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+#  jpa:
+#    show-sql: true
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: none
+#  thymeleaf:
+#    mode: LEGACYHTML5
+#  messages:
+#    fallbackToSystemLocale: false
+#  main:
+#    banner-mode: "off"
+#  resources:
+#    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${ms.setting.bing.bing_img_save_path}
+#
+#logging:
+#  level:
+#    root: info
+#  path: D:/test/log
+#  file: ms.log

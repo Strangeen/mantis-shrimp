@@ -21,6 +21,12 @@
 
         <dependency>
             <groupId>online.dinghuiye</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>online.dinghuiye</groupId>
             <artifactId>coremanager</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -31,11 +37,22 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- thymeleaf LEGACYHTML5 -->
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!--该插件主要用途：构建可执行的JAR -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -62,7 +62,7 @@
                              th:if="${stat.count > colNum * (row - 1) && stat.count <= row * colNum}">
                             <div class="panel panel-default">
                                 <div class="panel-heading" style="">
-                                    <span th:text="${item.bTitle + ' | ' + item.bDate}"></span>
+                                    <span th:text="${item.bTitle + ' | ' + #dates.format(item.bDate,'yyyy-MM-dd')}"></span>
                                     <span class="del-icon" th:onclick="'delItem(' + ${item.id} + ')'"><i
                                             class="fa fa-times"></i></span>
                                 </div>

@@ -1,5 +1,6 @@
 package online.dinghuiye.mantisshrimp.config;
 
+import online.dinghuiye.mantisshrimp.consts.MsParam;
 import online.dinghuiye.mantisshrimp.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,13 +16,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 //@ConditionalOnExpression("'${ms.devMode}'!='true'")
 public class MyWebMVCConfig extends WebMvcConfigurerAdapter {
 
-    @Value("${ms.devMode}")
-    private String devMode;
+//    @Value("${ms.devMode}")
+//    private String devMode;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
-        if (!"true".equals(devMode))
+        if (!"true".equals(MsParam.dev_mode))
             registry.addInterceptor(new LoginInterceptor())
                     .addPathPatterns("/**")
                     .excludePathPatterns("/login.ms", "/doLogin.ms");

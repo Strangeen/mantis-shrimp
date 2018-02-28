@@ -10,4 +10,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bing-collection</artifactId>
+
+    <properties>
+        <project.version>1.0.0</project.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>online.dinghuiye</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

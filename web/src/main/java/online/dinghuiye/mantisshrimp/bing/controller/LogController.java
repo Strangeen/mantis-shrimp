@@ -24,6 +24,6 @@ public class LogController {
     public String index(Model model) {
 
         model.addAttribute("logs", logService.findAll(new PageRequest(0, BingParam.log_page_size, new Sort(Sort.Direction.DESC, "id"))));
-        return "/ms/bing/log/log";
+        return "ms/bing/log/log";
     }
 }

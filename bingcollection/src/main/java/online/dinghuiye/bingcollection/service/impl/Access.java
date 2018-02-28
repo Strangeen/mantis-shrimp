@@ -1,5 +1,6 @@
 package online.dinghuiye.bingcollection.service.impl;
 
+import online.dinghuiye.bingcollection.consts.BingParam;
 import online.dinghuiye.bingcollection.dao.BingItemDao;
 import online.dinghuiye.bingcollection.entity.BingImageFile;
 import online.dinghuiye.bingcollection.entity.BingPullException;
@@ -10,7 +11,6 @@ import online.dinghuiye.common.util.MailUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -40,10 +40,10 @@ public class Access {
     private MailUtil mailUtil;
 
 
-    @Value("${ms.setting.mngMail}")
-    private String mngMial;
-    @Value("${ms.setting.toMail}")
-    private String toMial;
+//    @Value("${ms.setting.mngMail}")
+//    private String mngMial;
+//    @Value("${ms.setting.toMail}")
+//    private String toMial;
 
 
     /**
@@ -61,19 +61,19 @@ public class Access {
             // 拉取文件
             item = bing(date, imgFile, smallWidth);
             // 记录日志
-            logOper.create("success", item.getId() + " | " + item.getbTitle(), byHand);
-            if (!byHand)
+            logOper.create("success", item.getId() + " | " + new SimpleDateFormat(BingParam.bing_date_format).format(item.getbDate()) + " | " + item.getbTitle(), byHand);
+            if (!byHand || "true".equals(BingParam.send_when_by_hand))
                 // 发送邮件
                 // TODO 邮件内容改为模板生成
-                mailUtil.sendMail(toMial.split(","), item.getbTitle(), concatMailContent(item), getAttachment(item, imgFile.getImgRootPath()));
+                mailUtil.sendMail(BingParam.to_mail.split(","), item.getbTitle(), concatMailContent(item), getAttachment(item, imgFile.getImgRootPath()));
         } catch (Exception e) {
             if (e instanceof BingPullException) {
                 // 记录日志
                 logOper.create("fail", e.getMessage(), byHand);
-                if (!byHand)
+                if (!byHand || "true".equals(BingParam.send_when_by_hand))
                     // 发送邮件
                     // TODO 邮件内容改为模板生成
-                    mailUtil.sendMail(new String[]{mngMial}, "Bing收集失败", e.getMessage());
+                    mailUtil.sendMail(new String[]{BingParam.manage_mail}, "Bing收集失败", e.getMessage());
             }
             throw new RuntimeException(e);
         }
@@ -90,7 +90,9 @@ public class Access {
     private String concatMailContent(BingItemEntity item) {
         return "<html><p>" + item.getbTitle() + "</p>" +
                     "<p>#[mail-attach]</p>" +
-                    item.getbDesc() + "</html>";
+                    item.getbDesc() +
+                    "<style>#hpla,#hpla img{width:inherit!important;color:#333!important}#hplaT{width:354px}</style>" +
+                "</html>";
     }
 
     private MailAttachment getAttachment(BingItemEntity item, String imgRootPath) {
