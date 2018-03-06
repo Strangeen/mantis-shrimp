@@ -1,60 +1,62 @@
-#ms:
-#  setting:
-#    common:
-#      dev_mode: true
-#      page_size: 16
-#      date_format: yyyyMMdd
-#      date_time_format: yyyy-MM-dd HH:mm:ss
-#    bing:
-#      manage_mail: xxx@xxx.com
-#      to_mail: xxx@xxx.com,xxx@xxx.com
-##      acquire_cron: 0 0 10 * * ?
-#      send_when_by_hand: false
+ms:
+  setting:
+    common:
+      dev_mode: true
+      page_size: 16
+      date_format: yyyyMMdd
+      date_time_format: yyyy-MM-dd HH:mm:ss
+      local_zone_id: GMT-5
+      to_zone_id: GMT+8
+    bing:
+      manage_mail: xxx@xxx.com
+      to_mail: xxx@xxx.com,xxx@xxx.com
+      acquire_cron_exp: 5 * * * * ?
+      send_when_by_hand: false
 #      bing_img_save_path: D:/test/upload
-#      bing_url: http://bing.com
+      bing_url: http://bing.com
 #      bing_desc_interface_url: http://cn.bing.com/cnhp/life?currentDate=
 #      bing_img_interface_url: https://www.bing.com/HPImageArchive.aspx?format=js&n=1&pid=hp&mkt=zh-CN&video=1&idx=
-#      bing_img_folder_format: yyyyMM
-#      bing_date_format: yyyyMMdd
-#      bing_img_prefix: bing
-#      bing_small_img_width: 600
-#      bing_photo_list_col_num: 4
-#
-#server:
-#  port: 9001
-#
-#spring:
+      bing_img_folder_format: yyyyMM
+      bing_date_format: yyyyMMdd
+      bing_img_prefix: bing
+      bing_small_img_width: 600
+      bing_photo_list_col_num: 4
+
+server:
+  port: 9001
+
+spring:
 #  datasource:
 #    url: jdbc:h2:tcp://localhost/D:/test/data/database
 #    username: sa
 #    password:
-#  mail:
-#    host: smtp.xxx.com
-#    username: xxx@xxx.com
-#    password: xxx
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#            required: true
-#  jpa:
-#    show-sql: true
-#    generate-ddl: true
-#    hibernate:
-#      ddl-auto: none
-#  thymeleaf:
-#    mode: LEGACYHTML5
-#  messages:
-#    fallbackToSystemLocale: false
+  mail:
+    host: smtp.xxx.com
+    username: xxx@xxx.com
+    password: xxx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+  thymeleaf:
+    mode: LEGACYHTML5
+  messages:
+    fallbackToSystemLocale: false
 #  main:
 #    banner-mode: "off"
-#  resources:
-#    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${ms.setting.bing.bing_img_save_path}
-#
-#logging:
-#  level:
-#    root: info
-#  path: D:/test/log
-#  file: ms.log
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${ms.setting.bing.bing_img_save_path}
+
+logging:
+  level:
+    root: info
+  path: D:/test/log
+  file: ms.log

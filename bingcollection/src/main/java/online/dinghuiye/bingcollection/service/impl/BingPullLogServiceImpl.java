@@ -11,12 +11,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BingPullLogServiceImpl extends AbstractICommonServiceImpl<BingPullLogDao, BingPullLogEntity, Long> implements BingPullLogService {
-
-    /*@Autowired
-    private BingItemDao bingItemDao;
-
-    @Override
-    public List<BingItemEntity> findPage(BingItemEntity condition, List<Sort> sorts, int page, int pageSize) {
-        return bingItemDao.findPage(condition, sorts, page, pageSize);
-    }*/
 }

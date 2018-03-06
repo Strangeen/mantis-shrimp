@@ -1,4 +1,4 @@
-package online.dinghuiye.mantisshrimp.consts;
+package online.dinghuiye.common.consts;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -20,6 +20,10 @@ public class MsParam {
 
     public static String dev_mode;
 
+    private String localZoneId;
+
+    private String toZoneId;
+
     public static void setPage_size(int page_size) {
         MsParam.page_size = page_size;
     }
@@ -34,5 +38,21 @@ public class MsParam {
 
     public static void setDev_mode(String dev_mode) {
         MsParam.dev_mode = dev_mode;
+    }
+
+    public String getLocalZoneId() {
+        return localZoneId;
+    }
+
+    public void setLocalZoneId(String localZoneId) {
+        this.localZoneId = localZoneId;
+    }
+
+    public String getToZoneId() {
+        return toZoneId;
+    }
+
+    public void setToZoneId(String toZoneId) {
+        this.toZoneId = toZoneId;
     }
 }

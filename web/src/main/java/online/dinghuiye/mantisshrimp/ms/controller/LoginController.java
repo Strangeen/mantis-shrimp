@@ -1,7 +1,7 @@
 package online.dinghuiye.mantisshrimp.ms.controller;
 
+import online.dinghuiye.common.consts.MsParam;
 import online.dinghuiye.common.pojo.MsAccountEntity;
-import online.dinghuiye.mantisshrimp.consts.MsParam;
 import online.dinghuiye.service.MsAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +18,12 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/")
 public class LoginController {
 
+    private final MsAccountService accountService;
+
     @Autowired
-    private MsAccountService accountService;
+    public LoginController(MsAccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @RequestMapping(value = "/login.ms", method = RequestMethod.GET)
     public String login() {

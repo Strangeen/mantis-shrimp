@@ -1,6 +1,6 @@
 package online.dinghuiye.mantisshrimp.interceptor;
 
-import online.dinghuiye.mantisshrimp.consts.MsParam;
+import online.dinghuiye.common.consts.MsParam;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

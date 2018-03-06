@@ -5,7 +5,7 @@
 
 	<groupId>online.dinghuiye</groupId>
 	<artifactId>mantis-shrimp</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
     <modules>
 		<module>common</module>
 		<module>coremanager</module>
@@ -28,8 +28,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-
-        <project.version>1.0.0</project.version>
 	</properties>
 
 	<dependencies>
@@ -64,6 +62,11 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -85,11 +88,11 @@
             <version>1.2.44</version>
         </dependency>
 
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>1.8.4</version>
-		</dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.3</version>
+        </dependency>
 
         <dependency>
             <groupId>com.xice7.imageKit</groupId>

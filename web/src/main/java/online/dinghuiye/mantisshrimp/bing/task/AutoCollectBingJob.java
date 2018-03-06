@@ -1,35 +1,31 @@
-package online.dinghuiye.mantisshrimp.config;
+package online.dinghuiye.mantisshrimp.bing.task;
 
 import online.dinghuiye.bingcollection.consts.BingParam;
 import online.dinghuiye.bingcollection.entity.BingImageFile;
 import online.dinghuiye.bingcollection.service.impl.Access;
 import online.dinghuiye.common.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
 /**
- * @author Strangeen on 2018/02/21
- * @deprecated AutoCollectBingJob 替代
+ * @author Strangeen on 2018/03/05
  */
-//@Component
-//@EnableScheduling
-@Deprecated
-public class ScheduleTasks {
+public class AutoCollectBingJob {
 
-    private final Access access;
+    private Access access;
 
-    //@Autowired
-    public ScheduleTasks(Access access) {
+    @Autowired
+    public void setAccess(Access access) {
         this.access = access;
     }
 
-    //@Scheduled(cron = "0 0 10 * * ?")
-    public void reportCurrentByCron(){
-
+    /**
+     * 定时执行保存图片
+     */
+    public void run() {
         SimpleDateFormat bingSdf = new SimpleDateFormat(BingParam.bing_date_format);
         Date date = DateUtil.now();
         access.create(
@@ -42,5 +38,4 @@ public class ScheduleTasks {
                                 UUID.randomUUID() + ".jpg"),
                 BingParam.bing_small_img_width);
     }
-
 }

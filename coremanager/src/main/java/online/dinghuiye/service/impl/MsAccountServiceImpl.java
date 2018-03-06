@@ -15,8 +15,12 @@ import java.util.List;
 @Service
 public class MsAccountServiceImpl extends AbstractICommonServiceImpl<MsAccountDao, MsAccountEntity, Long> implements MsAccountService {
 
+    private final MsAccountDao dao;
+
     @Autowired
-    private MsAccountDao dao;
+    public MsAccountServiceImpl(MsAccountDao dao) {
+        this.dao = dao;
+    }
 
     @Override
     public List<MsAccountEntity> findByAccount(String account) {

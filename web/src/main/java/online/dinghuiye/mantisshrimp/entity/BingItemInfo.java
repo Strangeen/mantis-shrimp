@@ -1,6 +1,6 @@
 package online.dinghuiye.mantisshrimp.entity;
 
-import online.dinghuiye.mantisshrimp.consts.MsParam;
+import online.dinghuiye.common.consts.MsParam;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -13,21 +13,6 @@ public class BingItemInfo {
 
     private String bDate;
     private String bTitle;
-    /*private String descLink;
-    private String imgCopyright;
-    private String imgCopyrightLink;
-    private String imgUrl;
-    private String vdoTitle;
-    private String vdoCopyright;
-    private String vdoHdUrl;
-    private String vdoMp4Url;
-    private String vdoMobileUrl;
-    private String vdoImgLink;
-    private String vdoImgMobileLink;
-    private String imgLocalUrl;
-    private String smallImgUrl;
-    private Date createTime;
-    private String bDesc;*/
 
     public Date getDate() {
         try {

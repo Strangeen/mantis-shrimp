@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value = "/bing/log", method = RequestMethod.GET)
 public class LogController {
 
+    private final BingPullLogService logService;
+
     @Autowired
-    private BingPullLogService logService;
+    public LogController(BingPullLogService logService) {
+        this.logService = logService;
+    }
 
     @RequestMapping("")
     public String index(Model model) {

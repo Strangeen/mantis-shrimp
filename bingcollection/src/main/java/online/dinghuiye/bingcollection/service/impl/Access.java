@@ -7,11 +7,14 @@ import online.dinghuiye.bingcollection.entity.BingPullException;
 import online.dinghuiye.bingcollection.pojo.BingItemEntity;
 import online.dinghuiye.common.entity.MailAttachment;
 import online.dinghuiye.common.entity.MailImage;
+import online.dinghuiye.common.util.DateUtil;
 import online.dinghuiye.common.util.MailUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -20,7 +23,7 @@ import java.util.UUID;
 
 /**
  * @author Strangeen on 2018/01/27
- *
+ * <p>
  * bing图片收集功能入口
  */
 @Service
@@ -28,52 +31,68 @@ public class Access {
 
     private static final Logger logger = LoggerFactory.getLogger(Access.class);
 
-    @Autowired
-    private BingAcquirer acquirer;
-    @Autowired
-    private BingImgSaver saver;
-    @Autowired
-    private BingItemDao itemDao;
-    @Autowired
-    private BingLogOper logOper;
-    @Autowired
-    private MailUtil mailUtil;
+    private final BingAcquirer acquirer;
+    private final BingImgSaver saver;
+    private final BingItemDao itemDao;
+    private final BingLogOper logOper;
+    private final MailUtil mailUtil;
 
+    @Value("${spring.mail.username}")
+    private String fromMail;
 
-//    @Value("${ms.setting.mngMail}")
-//    private String mngMial;
-//    @Value("${ms.setting.toMail}")
-//    private String toMial;
-
+    @Autowired
+    public Access(BingAcquirer acquirer, BingImgSaver saver, BingItemDao itemDao, BingLogOper logOper, MailUtil mailUtil) {
+        this.acquirer = acquirer;
+        this.saver = saver;
+        this.itemDao = itemDao;
+        this.logOper = logOper;
+        this.mailUtil = mailUtil;
+    }
 
     /**
      * 创建一次收集，包括拉取文件，记录操作日志，以及发送提示邮件
      *
-     * @param date 拉取文件所在日期，null表示当日
-     * @param imgFile 存放img相关路径信息
+     * @param date       拉取文件所在日期
+     * @param imgFile    存放img相关路径信息
      * @param smallWidth 缩略图的宽度
-     * @param byHand 是否手动创建，用于log记录
+     * @param byHand     是否手动创建，用于log记录
      * @return bing条目对象
      */
     public BingItemEntity create(Date date, BingImageFile imgFile, int smallWidth, boolean byHand) {
+
+        Assert.notNull(date, "date must not null");
         BingItemEntity item;
         try {
             // 拉取文件
             item = bing(date, imgFile, smallWidth);
+
             // 记录日志
-            logOper.create("success", item.getId() + " | " + new SimpleDateFormat(BingParam.bing_date_format).format(item.getbDate()) + " | " + item.getbTitle(), byHand);
+            StringBuilder msg = new StringBuilder()
+                    .append(item.getId()).append(" | ")
+                    .append(new SimpleDateFormat(BingParam.bing_date_format).format(item.getbDate()))
+                    .append(" | ").append(item.getbTitle());
+            logOper.create("success", msg.toString(), byHand);
+
+            // 发送邮件
             if (!byHand || "true".equals(BingParam.send_when_by_hand))
-                // 发送邮件
                 // TODO 邮件内容改为模板生成
-                mailUtil.sendMail(BingParam.to_mail.split(","), item.getbTitle(), concatMailContent(item), getAttachment(item, imgFile.getImgRootPath()));
+                mailUtil.sendMail(
+                        fromMail, BingParam.to_mail.split(","),
+                        item.getbTitle(), concatMailContent(item),
+                        getAttachment(item, imgFile.getImgRootPath()));
+
         } catch (Exception e) {
+
             if (e instanceof BingPullException) {
                 // 记录日志
                 logOper.create("fail", e.getMessage(), byHand);
+
+                // 发送邮件
                 if (!byHand || "true".equals(BingParam.send_when_by_hand))
-                    // 发送邮件
                     // TODO 邮件内容改为模板生成
-                    mailUtil.sendMail(new String[]{BingParam.manage_mail}, "Bing收集失败", e.getMessage());
+                    mailUtil.sendMail(
+                            fromMail, new String[]{BingParam.manage_mail},
+                            "Bing收集失败", e.getMessage());
             }
             throw new RuntimeException(e);
         }
@@ -88,42 +107,49 @@ public class Access {
     }
 
     private String concatMailContent(BingItemEntity item) {
-        return "<html><p>" + item.getbTitle() + "</p>" +
-                    "<p>#[mail-attach]</p>" +
-                    item.getbDesc() +
-                    "<style>#hpla,#hpla img{width:inherit!important;color:#333!important}#hplaT{width:354px}</style>" +
-                "</html>";
+        return new StringBuilder()
+                .append("<html><p>").append(item.getbTitle()).append("</p>")
+                .append("<p>#[mail-attach]</p>").append(item.getbDesc())
+                .append("<style>#hpla,#hpla img{width:inherit!important;")
+                .append("color:#333!important}#hplaT{width:354px}</style></html>")
+                .toString();
     }
 
     private MailAttachment getAttachment(BingItemEntity item, String imgRootPath) {
-        return new MailImage(UUID.randomUUID().toString(), new File(imgRootPath + item.getSmallImgUrl()));
+        return new MailImage(
+                UUID.randomUUID().toString(),
+                new File(imgRootPath + item.getSmallImgUrl()));
     }
 
     /**
      * 拉取文件功能总成
      *
-     * @param date 拉取文件所在日期，null表示当日
-     * @param imgFile 存放img相关路径信息
+     * @param date       拉取文件所在日期
+     * @param imgFile    存放img相关路径信息
      * @param smallWidth 缩略图的宽度
      * @return bing条目对象
      */
     protected BingItemEntity bing(Date date, BingImageFile imgFile, int smallWidth) {
 
+        Assert.notNull(date, "date must not null");
         try {
-            Date today = new Date();
-            if (date == null) date = today;
+//            Date today = DateUtil.now();
+//            if (date == null) date = today;
 
             BingItemEntity item = acquirer.getBingImg(date);
             String desc = acquirer.getBingDesc(date);
 
             String imgRootPath = imgFile.getImgRootPath();
-            File img = new File(imgRootPath + new SimpleDateFormat(imgFile.getImgFolderFormat()).format(date) + "/" + imgFile.getImgFileName());
+            File img = new File(
+                    imgRootPath +
+                            new SimpleDateFormat(imgFile.getImgFolderFormat()).format(date) + "/" +
+                            imgFile.getImgFileName());
             saver.dealImg(item, img, smallWidth);
 
             item.setImgLocalUrl(fixImgLocalUrl(item.getImgLocalUrl(), imgRootPath))
                     .setSmallImgUrl(fixImgLocalUrl(item.getSmallImgUrl(), imgRootPath))
                     .setbDesc(desc)
-                    .setCreateTime(new Date());
+                    .setCreateTime(DateUtil.now());
             itemDao.save(item);
             return item;
 
@@ -135,7 +161,7 @@ public class Access {
 
     private String fixImgLocalUrl(String imgLocalUrl, String imgRootPath) {
         String imgRelativePath = imgLocalUrl.replace("\\", "/").substring(imgRootPath.length());
-        if (imgRelativePath.indexOf(":") <= -1 && !imgRelativePath.startsWith("/"))
+        if (!imgRelativePath.contains(":") && !imgRelativePath.startsWith("/"))
             imgRelativePath = "/" + imgRelativePath;
         return imgRelativePath;
     }

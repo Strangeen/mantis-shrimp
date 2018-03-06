@@ -27,8 +27,12 @@ public class AbstractICommonServiceImpl<DAOT extends JpaRepository<OT, IDT> & Jp
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractICommonServiceImpl.class);
 
-    @Autowired
     private DAOT dao;
+
+    @Autowired
+    public void setDao(DAOT dao) {
+        this.dao = dao;
+    }
 
     @Override
     public OT findById(IDT id) {
@@ -140,7 +144,7 @@ public class AbstractICommonServiceImpl<DAOT extends JpaRepository<OT, IDT> & Jp
                     if (fieldVal != null) {
                         if (fieldVal instanceof String) {
                             if (!"".equals(((String)fieldVal).trim()))
-                                predicates.add(cb.like(root.get(field.getName()), "%" + (String) fieldVal + "%"));
+                                predicates.add(cb.like(root.get(field.getName()), "%" + fieldVal + "%"));
                         } else {
                             predicates.add(cb.equal(root.get(field.getName()), fieldVal));
                         }

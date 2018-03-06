@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import online.dinghuiye.bingcollection.consts.BingParam;
 import online.dinghuiye.bingcollection.entity.BingImageUrlWrapper;
 import online.dinghuiye.bingcollection.pojo.BingItemEntity;
+import online.dinghuiye.common.util.DateUtil;
 import online.dinghuiye.common.util.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -33,15 +35,15 @@ public class BingAcquirer {
     /**
      * 获取bing图片边栏描述html
      *
-     * @param date 该日期的图片边栏描述，null表示当天
+     * @param date 该日期的图片边栏描述
      * @param descInterfaceUrl 边栏描述获取接口url，null使用默认，一般保持null
      * @return 描述html字符串
      */
     private String getBingDesc(Date date, String descInterfaceUrl) {
 
+        Assert.notNull(date, "date must not null");
         try {
-
-            if (date == null) date = new Date();
+            //if (date == null) date = DateUtil.now();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
             if(StringUtils.isBlank(descInterfaceUrl))
@@ -58,8 +60,7 @@ public class BingAcquirer {
                     new String[]{BingParam.bing_url + s1, BingParam.bing_url + s2, BingParam.bing_url + s3});
 
         } catch (Exception e) {
-
-            logger.error("获取图片边栏描述内容失败");
+            logger.error("pull image description error", e);
             throw new RuntimeException(e);
         }
     }
@@ -78,6 +79,7 @@ public class BingAcquirer {
      */
     public BingItemEntity getBingImg(Date date, String imgInterfaceUrl) {
 
+        Assert.notNull(date, "date must not null");
         try {
 
             //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -94,10 +96,10 @@ public class BingAcquirer {
              */
 
             int index = 0;
-            Date today = new Date();
-            if (date == null) date = today;
+            Date today = DateUtil.now();
+            //if (date == null) date = today;
             if (date.getTime() < today.getTime()) {
-                LocalDate todayLd = LocalDate.now();
+                LocalDate todayLd = LocalDateTime.ofInstant(today.toInstant(), ZoneId.systemDefault()).toLocalDate();
                 LocalDate dateLd = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalDate();
                 index = (int) (todayLd.toEpochDay() - dateLd.toEpochDay());
             }
@@ -143,8 +145,7 @@ public class BingAcquirer {
             return item;
 
         } catch (Exception e) {
-
-            logger.error("解析图片json失败");
+            logger.error("parse image json error", e);
             throw new RuntimeException(e);
         }
     }

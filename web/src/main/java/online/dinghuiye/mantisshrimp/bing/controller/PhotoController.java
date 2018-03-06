@@ -5,7 +5,8 @@ import online.dinghuiye.bingcollection.entity.BingImageFile;
 import online.dinghuiye.bingcollection.pojo.BingItemEntity;
 import online.dinghuiye.bingcollection.service.BingItemService;
 import online.dinghuiye.bingcollection.service.impl.Access;
-import online.dinghuiye.mantisshrimp.consts.MsParam;
+import online.dinghuiye.common.consts.MsParam;
+import online.dinghuiye.common.util.DateUtil;
 import online.dinghuiye.mantisshrimp.entity.BingItemInfo;
 import online.dinghuiye.mantisshrimp.entity.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,18 +32,21 @@ import java.util.UUID;
 @RequestMapping(value = "/bing", method = RequestMethod.GET)
 public class PhotoController {
 
-    @Autowired
-    private Access bingAllSaveAccessService;
+    private final Access bingAllSaveAccessService;
+    private final BingItemService itemService;
 
     @Autowired
-    private BingItemService itemService;
+    public PhotoController(Access bingAllSaveAccessService, BingItemService itemService) {
+        this.bingAllSaveAccessService = bingAllSaveAccessService;
+        this.itemService = itemService;
+    }
 
     @RequestMapping("")
-    public String index(HttpServletRequest request, BingItemInfo queryItem, PageInfo pageInfo, Model model) {
+    public String index(BingItemInfo queryItem, PageInfo pageInfo, Model model) {
 
         int page = 0;
         try {
-            page = Integer.valueOf(pageInfo.getPage()) - 1;
+            page = pageInfo.getPage() - 1;
         } catch (Exception e) {
             // do nothing
         }
@@ -79,7 +82,7 @@ public class PhotoController {
 
         try {
             SimpleDateFormat bingSdf = new SimpleDateFormat(BingParam.bing_date_format);
-            Date date = new Date();
+            Date date = DateUtil.now();
             if (!StringUtils.isBlank(dateStr)) {
                 date = bingSdf.parse(dateStr);
             }
@@ -119,6 +122,4 @@ public class PhotoController {
         if (img.exists()) img.delete();
     }
 
-//    @RequestMapping(value = "/detal.ms")
-//    public String detail
 }

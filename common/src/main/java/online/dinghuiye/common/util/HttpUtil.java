@@ -32,14 +32,14 @@ public class HttpUtil {
         try (CloseableHttpResponse response = httpclient.execute(httpGet);) {
 
             int code = response.getStatusLine().getStatusCode();
-            if (code != 200) throw new RuntimeException("请求失败，response code：" + code);
+            if (code != 200) throw new RuntimeException("request error，response code：" + code);
 
             HttpEntity entity = response.getEntity();
             return EntityUtils.toString(entity, "utf-8");
 
         } catch (IOException e) {
 
-            logger.error("获取内容失败，url：" + url);
+            logger.error("acquire content error，url：" + url);
             throw new RuntimeException(e);
         }
     }

@@ -1,6 +1,6 @@
 package online.dinghuiye.mantisshrimp.config;
 
-import online.dinghuiye.mantisshrimp.consts.MsParam;
+import online.dinghuiye.common.consts.MsParam;
 import org.springframework.format.Formatter;
 
 import java.text.ParseException;
@@ -12,9 +12,6 @@ import java.util.Locale;
  * @author Strangeen on 2018/02/25
  */
 public class DateFormatter implements Formatter<Date> {
-
-//    @Value("${ms.consts.common.date_time_format}")
-//    private String format;
 
     @Override
     public Date parse(String s, Locale locale) throws ParseException {

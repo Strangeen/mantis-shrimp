@@ -36,7 +36,7 @@ public class BingImgSaver {
             compressFile(destImg, bingSmallImage);
 
         } catch (Exception e) {
-            logger.error("保存图片失败", e);
+            logger.error("save image error", e);
             throw new RuntimeException(e);
         }
     }
@@ -67,12 +67,18 @@ public class BingImgSaver {
                 fos.write(buf, 0, len);
             }
         } catch (Exception e) {
-            logger.error("下载文件失败", e);
+            logger.error("pull image error", e);
             throw new RuntimeException(e);
         } finally {
             try {
-                if (is != null) is.close();
-                if (fos != null) fos.close();
+                if (is != null) {
+                    is.close();
+                    is = null;
+                }
+                if (fos != null) {
+                    fos.close();
+                    fos = null;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -86,25 +92,30 @@ public class BingImgSaver {
      * @param smallWidth 缩略图宽度
      * @return 缩略图对象
      */
-    protected BingSmallImage calcSamllImg(File img, int smallWidth) throws IOException {
-        BufferedImage bimg = ImageIO.read(new FileInputStream(img));
-        int height = bimg.getHeight();
-        int width = bimg.getWidth();
-        int smallHeight = (int) ((double) smallWidth * height / width);
-        String imgFullName = img.getName();
-        String imgSuffix = imgFullName.substring(imgFullName.lastIndexOf("."));
-        String imgName = imgFullName.substring(0, imgFullName.length() - imgSuffix.length());
-        int newWidth = 0;
-        int newHeight = 0;
-        if (smallWidth < width) {
-            newWidth = smallWidth;
-            newHeight = smallHeight;
-        } else {
-            newWidth = width;
-            newHeight = height;
+    protected BingSmallImage calcSamllImg(File img, int smallWidth) {
+        try (InputStream in = new FileInputStream(img)) {
+            BufferedImage bimg = ImageIO.read(in);
+            int height = bimg.getHeight();
+            int width = bimg.getWidth();
+            int smallHeight = (int) ((double) smallWidth * height / width);
+            String imgFullName = img.getName();
+            String imgSuffix = imgFullName.substring(imgFullName.lastIndexOf("."));
+            String imgName = imgFullName.substring(0, imgFullName.length() - imgSuffix.length());
+            int newWidth = 0;
+            int newHeight = 0;
+            if (smallWidth < width) {
+                newWidth = smallWidth;
+                newHeight = smallHeight;
+            } else {
+                newWidth = width;
+                newHeight = height;
+            }
+            File smallFile = new File(img.getParentFile(), imgName + "_thumbnail_" + newWidth + "_" + newHeight + imgSuffix);
+            return new BingSmallImage(newWidth, newHeight, smallFile);
+        } catch (IOException e) {
+            logger.error("calculate width of thumbnail error");
+            throw new RuntimeException(e);
         }
-        File smallFile = new File(img.getParentFile(), imgName + "_thumbnail_" + newWidth + "_" + newHeight + imgSuffix);
-        return new BingSmallImage(newWidth, newHeight, smallFile);
     }
 
     /**

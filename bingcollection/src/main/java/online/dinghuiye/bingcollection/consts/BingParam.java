@@ -37,7 +37,7 @@ public class BingParam {
 
     public static String send_when_by_hand;
 
-    public static String acquire_cron;
+    private String acquireCronExp;
 
     public static void setLog_page_size(int log_page_size) {
         BingParam.log_page_size = log_page_size;
@@ -91,7 +91,11 @@ public class BingParam {
         BingParam.send_when_by_hand = send_when_by_hand;
     }
 
-    public static void setAcquire_cron(String acquire_cron) {
-        BingParam.acquire_cron = acquire_cron;
+    public String getAcquireCronExp() {
+        return acquireCronExp;
+    }
+
+    public void setAcquireCronExp(String acquireCronExp) {
+        this.acquireCronExp = acquireCronExp;
     }
 }

@@ -4,7 +4,6 @@ import online.dinghuiye.common.entity.MailAttachment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -21,13 +20,14 @@ public class MailUtil {
 
     private Logger logger = LoggerFactory.getLogger(MailUtil.class);
 
+    private final JavaMailSender mailSender;
+
     @Autowired
-    private JavaMailSender mailSender;
+    public MailUtil(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
-    @Value("${spring.mail.username}")
-    private String fromMail;
-
-    public void sendMail(String[] toMail, String title, String content, MailAttachment... attachments) {
+    public void sendMail(String fromMail, String[] toMail, String title, String content, MailAttachment... attachments) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);

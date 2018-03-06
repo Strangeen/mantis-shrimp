@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value = "/account", method = RequestMethod.GET)
 public class AccountController {
 
+    private final MsAccountService accountService;
+
     @Autowired
-    private MsAccountService accountService;
+    public AccountController(MsAccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @RequestMapping("")
     public String index(Model model) {
@@ -25,7 +29,7 @@ public class AccountController {
     }
 
     @RequestMapping("/create.ms")
-    public String create(String id, Model model) {
+    public String create() {
         return "ms/account/save";
     }
 
@@ -48,7 +52,7 @@ public class AccountController {
     }
 
     @RequestMapping("/doDelete.ms")
-    public String doDelete(String id, Model model) {
+    public String doDelete(String id) {
         accountService.delete(Long.valueOf(id));
         return "redirect:/account";
     }
