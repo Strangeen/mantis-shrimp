@@ -11,6 +11,8 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import java.util.TimeZone;
+
 /**
  * @author Strangeen on 2018/03/05
  */
@@ -41,6 +43,7 @@ public class QuartzConfig {
         bean.setGroup("bing");
         bean.setJobDetail(jobDetail);
         bean.setCronExpression(bingParam.getAcquireCronExp());
+        bean.setTimeZone(TimeZone.getTimeZone(bingParam.getCronZoneId()));
         return bean;
     }
 

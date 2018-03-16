@@ -23,14 +23,14 @@ public class TestDateUtil /*extends AbstractTest*/ {
     @Test
     public void testNow() {
         System.out.println(new Date());
-        System.out.println(DateUtil.now("GMT+8", "GMT-5"));
+        System.out.println(DateUtil.now("GMT+8", "America/New_York"));
     }
 
     @Test
     public void testToDate() {
         Date d = new Date();
         System.out.println(d);
-        System.out.println(DateUtil.toDate(d, "GMT+8", "GMT-5"));
+        System.out.println(DateUtil.toDate(d, "GMT+8", "America/New_York"));
     }
 
     @Test
@@ -106,13 +106,22 @@ public class TestDateUtil /*extends AbstractTest*/ {
     @Test
     public void test8() throws ParseException {
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+        /*DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
         {
             TemporalAccessor ta = dtf.withZone(ZoneId.of("UTC+8")).parse("2018-11-04 17:00:00"); // +8
             ZonedDateTime ztd = ZonedDateTime.from(ta);
             System.out.println(ztd.withZoneSameInstant(ZoneId.of("UTC-8")));
             System.out.println(ztd.withZoneSameLocal(ZoneId.of("UTC-8")));
+        }*/
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+        {
+            TemporalAccessor ta = dtf.withZone(ZoneId.of("UTC+8")).parse("2018-03-16 14:25:10"); // +8
+            ZonedDateTime ztd = ZonedDateTime.from(ta);
+            System.out.println(ztd.withZoneSameInstant(ZoneId.of("America/New_York"))); // 一定要写GMT-5，因为这样不知道是哪个国家，有没有执行夏令时
+            System.out.println(ztd.withZoneSameLocal(ZoneId.of("America/New_York")));
         }
+
     }
 
     /**

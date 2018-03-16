@@ -27,7 +27,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取本地时区当前时间在指定时区时的时间
+     * 获取本地时区指定时间在指定时区时的时间
      * java8实现
      *
      * @param date 本地时区时间Date对象
@@ -40,7 +40,6 @@ public class DateUtil {
         ZonedDateTime toZoneNow = zonedDateTime.withZoneSameLocal(ZoneId.of(localZoneId));
         return Date.from(toZoneNow.toInstant());
     }
-
 
 
     private static MsParam msParam;

@@ -5,12 +5,13 @@ ms:
       page_size: 16
       date_format: yyyyMMdd
       date_time_format: yyyy-MM-dd HH:mm:ss
-      local_zone_id: GMT-5
+      local_zone_id: America/New_York
       to_zone_id: GMT+8
     bing:
       manage_mail: xxx@xxx.com
       to_mail: xxx@xxx.com,xxx@xxx.com
       acquire_cron_exp: 5 * * * * ?
+      cron_zone_id: America/New_York
       send_when_by_hand: false
 #      bing_img_save_path: D:/test/upload
       bing_url: http://bing.com

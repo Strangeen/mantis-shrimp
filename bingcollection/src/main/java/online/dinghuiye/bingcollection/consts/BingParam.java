@@ -39,6 +39,8 @@ public class BingParam {
 
     private String acquireCronExp;
 
+    private String cronZoneId;
+
     public static void setLog_page_size(int log_page_size) {
         BingParam.log_page_size = log_page_size;
     }
@@ -97,5 +99,13 @@ public class BingParam {
 
     public void setAcquireCronExp(String acquireCronExp) {
         this.acquireCronExp = acquireCronExp;
+    }
+
+    public String getCronZoneId() {
+        return cronZoneId;
+    }
+
+    public void setCronZoneId(String cronZoneId) {
+        this.cronZoneId = cronZoneId;
     }
 }
