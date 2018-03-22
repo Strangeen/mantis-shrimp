@@ -31,6 +31,28 @@ public class BingItemEntity {
     private Date createTime;
     private String bDesc;
 
+    public BingItemEntity setVdoSrc(String[][] vdos) {
+        for (String[] vdo : vdos) {
+            String type = vdo[0];
+            switch (type) {
+                case "mp4":
+                    setVdoMp4Url(vdo[2]);
+                    break;
+                case "mp4hd":
+                    setVdoHdUrl(vdo[2]);
+                    break;
+                case "mp4mobile":
+                    setVdoMobileUrl(vdo[2]);
+                    break;
+                default:
+                    throw new RuntimeException(
+                            "video type error with " + type + ", not mp4, mp4hd, mp4mobile");
+            }
+        }
+        return this;
+    }
+
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

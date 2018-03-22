@@ -136,11 +136,9 @@ public class BingAcquirer {
 
                 item.setVdoTitle(vdoTitle)
                     .setVdoCopyright(vdoCopyright)
-                    .setVdoHdUrl(vdo.getSources()[1][2])
-                    .setVdoMp4Url(vdo.getSources()[0][2])
-                    .setVdoMobileUrl(vdo.getSources()[2][2])
                     .setVdoImgLink(vdo.getImage())
-                    .setVdoImgMobileLink(vdo.getMobileimage());
+                    .setVdoImgMobileLink(vdo.getMobileimage())
+                    .setVdoSrc(vdo.getSources());
             }
             return item;
 
@@ -149,5 +147,4 @@ public class BingAcquirer {
             throw new RuntimeException(e);
         }
     }
-
 }
