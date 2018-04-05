@@ -111,7 +111,7 @@ public class BingAcquirer {
             BingImageUrlWrapper waper = JSONObject.parseObject(json, BingImageUrlWrapper.class);
 
             BingImageUrlWrapper.Image img = waper.getImages()[0];
-            Pattern pattern = Pattern.compile("^(.*)(\\(©.*)$");
+            Pattern pattern = Pattern.compile("^(.*)([\\(（]{1}©.*)$");
 
             // img
             Matcher matcher = pattern.matcher(img.getCopyright());
