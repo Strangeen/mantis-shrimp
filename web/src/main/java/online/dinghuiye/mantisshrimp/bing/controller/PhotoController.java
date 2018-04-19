@@ -10,6 +10,8 @@ import online.dinghuiye.common.util.DateUtil;
 import online.dinghuiye.mantisshrimp.entity.BingItemInfo;
 import online.dinghuiye.mantisshrimp.entity.PageInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -31,6 +34,8 @@ import java.util.UUID;
 @Controller
 @RequestMapping(value = "/bing", method = RequestMethod.GET)
 public class PhotoController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PhotoController.class);
 
     private final Access bingAllSaveAccessService;
     private final BingItemService itemService;
@@ -82,10 +87,18 @@ public class PhotoController {
 
         try {
             SimpleDateFormat bingSdf = new SimpleDateFormat(BingParam.bing_date_format);
-            Date date = DateUtil.now();
-            if (!StringUtils.isBlank(dateStr)) {
-                date = bingSdf.parse(dateStr);
+            Date date;
+            try {
+                if (!StringUtils.isBlank(dateStr))
+                    date = bingSdf.parse(dateStr);
+                else
+                    date = DateUtil.now();
+            } catch (ParseException e) {
+                date = DateUtil.now();
             }
+
+            logger.error("----------- 手动运行：dateStr：\"" + dateStr + "\"：生成的date：" + date + " -----------");
+
             bingAllSaveAccessService.create(
                     date, // 输入的日期也按照yyyyMMdd格式
                     new BingImageFile(
@@ -121,5 +134,4 @@ public class PhotoController {
         File img = new File(rootPath + imgUrl);
         if (img.exists()) img.delete();
     }
-
 }
