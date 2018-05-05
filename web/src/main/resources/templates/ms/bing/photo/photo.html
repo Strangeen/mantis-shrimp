@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <form role="form" th:action="@{/bing}" method="get">
+        <form id="form" role="form" th:action="@{/bing}" method="get">
             <!-- search -->
             <div class="row">
                 <div class="col-md-12">
@@ -81,20 +81,31 @@
             </div>
 
             <!-- page -->
+            <input type="hidden" id="page-box" name="page"/>
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default" style="border: 1px solid #ddd;">
                         <div class="panel-body">
                             <div class="row" th:inline="text">
-                                <div class="col-md-2 col-md-offset-8" style="line-height:35px;text-align:right;">
-                                    第[[${itemPage.number + 1}]]页 / 共[[${itemPage.totalPages}]]页
+                                <div class="col-md-9" style="text-align: right">
+                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.firstpage}" onclick="jumpTo(1)">
+                                        首页
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.prevpage}" th:onclick="${'jumpTo(' + itemPage.number + ')'}" th:if="${itemPage.number > 0}">
+                                        上一页
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.nextpage}" th:onclick="${'jumpTo(' + (itemPage.number + 2) + ')'}" th:if="${itemPage.number + 2 < itemPage.totalPages}">
+                                        下一页
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.lastpage}" th:onclick="${'jumpTo(' + itemPage.totalPages + ')'}">
+                                        尾页
+                                    </button>
                                 </div>
-                                <div class="col-md-1" style="padding-right:0">
-                                    <input class="form-control" name="page"
+                                <div class="col-md-3" style="line-height:35px;text-align:right;">
+                                    <span>第[[${itemPage.number + 1}]]页 / 共[[${itemPage.totalPages}]]页</span>
+                                    <input class="form-control" id="input-page-box" style="width:30%;display:inline;"
                                            th:placeholder="#{bing.photo.page.fill.tip}">
-                                </div>
-                                <div class="col-md-1" style="padding-left:5px">
-                                    <button type="submit" class="btn btn-outline btn-warning" th:text="#{ms.oper.jump}">
+                                    <button type="button" onclick="jumpTo($('#input-page-box').val())" class="btn btn-outline btn-warning" th:text="#{ms.oper.jump}">
                                         跳转
                                     </button>
                                 </div>
@@ -180,6 +191,10 @@
         if (window.confirm([[#{bing.photo.delete.tip}]])) {
             window.location.href = '/bing/doDelete.ms?id=' + id;
         }
+    }
+    function jumpTo(page) {
+        $('#page-box').val(page);
+        $('#form').submit();
     }
 </script>
 </html>

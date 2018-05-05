@@ -97,7 +97,7 @@ public class PhotoController {
                 date = DateUtil.now();
             }
 
-            logger.error("----------- 手动运行：dateStr：\"" + dateStr + "\"：生成的date：" + date + " -----------");
+            logger.info("手动运行：dateStr：\"" + dateStr + "\"：生成的date：" + date);
 
             bingAllSaveAccessService.create(
                     date, // 输入的日期也按照yyyyMMdd格式

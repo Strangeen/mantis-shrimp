@@ -33,7 +33,7 @@ public class AutoCollectBingJob {
         SimpleDateFormat bingSdf = new SimpleDateFormat(BingParam.bing_date_format);
         Date date = DateUtil.now();
 
-        logger.error("----------- 自动运行：生成的date：" + date + " -----------");
+        logger.info("自动运行：生成的date：" + date);
 
         access.create(
                 date, // 输入的日期也按照yyyyMMdd格式
