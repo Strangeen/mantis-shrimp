@@ -145,6 +145,8 @@ public class AbstractICommonServiceImpl<DAOT extends JpaRepository<OT, IDT> & Jp
                         if (fieldVal instanceof String) {
                             if (!"".equals(((String)fieldVal).trim()))
                                 predicates.add(cb.like(root.get(field.getName()), "%" + fieldVal + "%"));
+                            else
+                                predicates.add(cb.like(root.get(field.getName()), (String) fieldVal));
                         } else {
                             predicates.add(cb.equal(root.get(field.getName()), fieldVal));
                         }

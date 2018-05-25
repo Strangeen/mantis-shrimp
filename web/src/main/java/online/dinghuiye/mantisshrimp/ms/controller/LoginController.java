@@ -3,6 +3,7 @@ package online.dinghuiye.mantisshrimp.ms.controller;
 import online.dinghuiye.common.consts.MsParam;
 import online.dinghuiye.common.pojo.MsAccountEntity;
 import online.dinghuiye.service.MsAccountService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,10 @@ public class LoginController {
 
     @RequestMapping(value = "/doLogin.ms", method = RequestMethod.POST)
     public String doLogin(MsAccountEntity account, HttpSession session, Model model) {
+        if (StringUtils.isBlank(account.getAccount()) || StringUtils.isBlank(account.getPassword())) {
+            model.addAttribute("errorMsgCode", "emptyAccountOrPassword");
+            return "ms/login";
+        }
         MsAccountEntity account0 = accountService.findFirstBySample(account);
         if (account0 != null) {
             account0.setPassword(null);
