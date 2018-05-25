@@ -1,6 +1,7 @@
 package online.dinghuiye.bingcollection.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "BING_PULL_LOG")
-public class BingPullLogEntity {
+public class BingPullLogEntity implements Serializable {
 
     private Long id;
     private Date pullTime;

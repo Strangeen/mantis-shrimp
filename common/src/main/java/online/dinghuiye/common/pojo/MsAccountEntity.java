@@ -1,13 +1,14 @@
 package online.dinghuiye.common.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author Strangeen on 2018/01/10
  */
 @Entity
 @Table(name = "MS_ACCOUNT")
-public class MsAccountEntity {
+public class MsAccountEntity implements Serializable {
 
     private Long id;
     private String account;

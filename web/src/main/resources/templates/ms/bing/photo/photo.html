@@ -63,7 +63,16 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading" style="">
                                     <span th:text="${item.bTitle + ' | ' + #dates.format(item.bDate,'yyyy-MM-dd')}"></span>
-                                    <span class="del-icon" th:onclick="'delItem(' + ${item.id} + ')'"><i
+
+                                    <span class="photo-icon info-icon"
+                                          th:unless="${item.bDesc != null && item.bDesc.length() > 50}"
+                                          th:onclick="'reacquirePhotoInfo(' + ${item.id} + ')'"><i
+                                            class="fa fa-tags"></i></span>
+
+                                    <span class="photo-icon mail-icon"
+                                          th:onclick="'sendMail(' + ${item.id} + ', this)'"><i
+                                            class="fa fa-envelope"></i></span>
+                                    <span class="photo-icon del-icon" th:onclick="'delItem(' + ${item.id} + ')'"><i
                                             class="fa fa-times"></i></span>
                                 </div>
                                 <div class="panel-body photo-panel-body">
@@ -72,7 +81,12 @@
                                 <div class="panel-footer">
                                     <a th:href="${item.imgCopyrightLink}" target="_blank"
                                        th:text="${item.imgCopyright}"></a>&nbsp;
-                                    <span th:if="${item.bDesc.length() > 50}">DESC</span>
+                                    <!--<span th:if="${item.bDesc != null && item.bDesc.length() > 50}">DESC</span>-->
+                                    <!--<span th:unless="${item.bDesc != null && item.bDesc.length() > 50}">
+                                        <button type="button" class="btn btn-info btn-xs"
+                                                th:text="#{ms.oper.reacquire.photoinfo}"
+                                                th:onclick="'reacquirePhotoInfo(' + ${item.id} + ')'">
+                                    </span>-->
                                 </div>
                             </div>
                         </div>
@@ -88,16 +102,25 @@
                         <div class="panel-body">
                             <div class="row" th:inline="text">
                                 <div class="col-md-9" style="text-align: right">
-                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.firstpage}" onclick="jumpTo(1)">
+                                    <button type="button" class="btn btn-outline btn-warning"
+                                            th:text="#{ms.oper.firstpage}" onclick="jumpTo(1)">
                                         首页
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.prevpage}" th:onclick="${'jumpTo(' + itemPage.number + ')'}" th:if="${itemPage.number > 0}">
+                                    <button type="button" class="btn btn-outline btn-warning"
+                                            th:text="#{ms.oper.prevpage}"
+                                            th:onclick="${'jumpTo(' + itemPage.number + ')'}"
+                                            th:if="${itemPage.number > 0}">
                                         上一页
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.nextpage}" th:onclick="${'jumpTo(' + (itemPage.number + 2) + ')'}" th:if="${itemPage.number + 2 < itemPage.totalPages}">
+                                    <button type="button" class="btn btn-outline btn-warning"
+                                            th:text="#{ms.oper.nextpage}"
+                                            th:onclick="${'jumpTo(' + (itemPage.number + 2) + ')'}"
+                                            th:if="${itemPage.number + 2 < itemPage.totalPages}">
                                         下一页
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-warning" th:text="#{ms.oper.lastpage}" th:onclick="${'jumpTo(' + itemPage.totalPages + ')'}">
+                                    <button type="button" class="btn btn-outline btn-warning"
+                                            th:text="#{ms.oper.lastpage}"
+                                            th:onclick="${'jumpTo(' + itemPage.totalPages + ')'}">
                                         尾页
                                     </button>
                                 </div>
@@ -105,7 +128,8 @@
                                     <span>第[[${itemPage.number + 1}]]页 / 共[[${itemPage.totalPages}]]页</span>
                                     <input class="form-control" id="input-page-box" style="width:30%;display:inline;"
                                            th:placeholder="#{bing.photo.page.fill.tip}">
-                                    <button type="button" onclick="jumpTo($('#input-page-box').val())" class="btn btn-outline btn-warning" th:text="#{ms.oper.jump}">
+                                    <button type="button" onclick="jumpTo($('#input-page-box').val())"
+                                            class="btn btn-outline btn-warning" th:text="#{ms.oper.jump}">
                                         跳转
                                     </button>
                                 </div>
@@ -164,20 +188,49 @@
         position: relative;
     }
 
-    .panel-heading .del-icon {
+    .panel-heading .photo-icon {
         position: absolute;
         top: -13px;
-        right: -10px;
     }
 
-    .panel-heading .del-icon .fa {
+    .panel-heading .photo-icon .fa {
         font-size: 24px;
         color: #757575;
     }
 
-    .panel-heading .del-icon .fa:hover {
+    .panel-heading .photo-icon .fa:hover {
         color: #e40707;
         cursor: pointer;
+    }
+
+    .panel-heading .del-icon {
+        right: -10px;
+    }
+
+    .panel-heading .mail-icon {
+        top: -9px;
+        right: 15px;
+    }
+
+    .panel-heading .mail-icon .fa {
+        font-size: 18px;
+    }
+
+    .panel-heading .mail-icon .fa:hover {
+        color: #1c81ff;
+    }
+
+    .panel-heading .info-icon {
+        top: -9px;
+        right: 40px;
+    }
+
+    .panel-heading .info-icon .fa {
+        font-size: 18px;
+    }
+
+    .panel-heading .info-icon .fa:hover {
+        color: #1c81ff;
     }
 
     .panel-footer {
@@ -192,9 +245,39 @@
             window.location.href = '/bing/doDelete.ms?id=' + id;
         }
     }
+
     function jumpTo(page) {
         $('#page-box').val(page);
         $('#form').submit();
+    }
+
+    function reacquirePhotoInfo(id) {
+        window.location.href = '/bing/reacquirePhotoInfo.ms?id=' + id;
+    }
+
+    function sendMail(id, btn) {
+        $.ajax({
+            url: '/bing/sendMail.ms',
+            type: 'get',
+            dataType: 'json',
+            data: {id: id},
+            beforeSend: function () {
+                //alert('正在发送...');
+                $(btn).hide();
+            },
+            success: function (res) {
+                if (res) {
+                    if (res.status == 1) alert("发送成功");
+                    else alert(res.msg);
+                }
+            },
+            error: function () {
+                alert("发送失败");
+            },
+            complete: function () {
+                $(btn).show();
+            }
+        });
     }
 </script>
 </html>

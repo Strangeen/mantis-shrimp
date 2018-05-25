@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.File;
@@ -105,6 +106,54 @@ public class Access {
     public BingItemEntity create(Date date, BingImageFile imgFile, int smallWidth) {
         return create(date, imgFile, smallWidth, false);
     }
+
+    /**
+     * 发送邮件
+     * @param id item的id
+     * @param imgRootPath 图片存储目录
+     */
+    public void sendMail(Long id, String imgRootPath) {
+        BingItemEntity item = itemDao.findOne(id);
+        if (item == null) throw new RuntimeException("不存在条目");
+        mailUtil.sendMail(
+                fromMail, BingParam.to_mail.split(","),
+                item.getbTitle(), concatMailContent(item),
+                getAttachment(item, imgRootPath));
+    }
+
+
+    /**
+     * 获取图片信息(DESC)
+     * @param id
+     */
+    @Transactional
+    public void reacquireInfo(Long id) {
+
+        try {
+
+            BingItemEntity item = itemDao.findOne(id);
+            Date date = item.getbDate();
+            item.setbDesc(acquirer.getBingDesc(date));
+            itemDao.save(item);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            String dateStr = sdf.format(date);
+            String title = item.getbTitle();
+
+            // 记录日志
+            logOper.create("success", id + " | " + dateStr + " | " + title + " | 图片信息获取", true);
+
+        } catch (Exception e) {
+
+            logger.error("pull image info error", e);
+
+            // 记录日志
+//            if (e instanceof BingPullException)
+            logOper.create("fail", e.getMessage(), true);
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private String concatMailContent(BingItemEntity item) {
         return new StringBuilder()

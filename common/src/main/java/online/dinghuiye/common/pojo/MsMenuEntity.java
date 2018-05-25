@@ -1,13 +1,14 @@
 package online.dinghuiye.common.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author Strangeen on 2018/01/10
  */
 @Entity
 @Table(name = "MS_MENU")
-public class MsMenuEntity {
+public class MsMenuEntity implements Serializable {
 
     private Long id;
     private String mname;

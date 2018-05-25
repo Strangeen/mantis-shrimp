@@ -6,6 +6,8 @@ import online.dinghuiye.bingcollection.pojo.BingItemEntity;
 import online.dinghuiye.bingcollection.service.BingItemService;
 import online.dinghuiye.bingcollection.service.impl.Access;
 import online.dinghuiye.common.consts.MsParam;
+import online.dinghuiye.common.consts.ReturnStatusConsts;
+import online.dinghuiye.common.entity.ReturnVO;
 import online.dinghuiye.common.util.DateUtil;
 import online.dinghuiye.mantisshrimp.entity.BingItemInfo;
 import online.dinghuiye.mantisshrimp.entity.PageInfo;
@@ -21,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.text.ParseException;
@@ -133,5 +136,36 @@ public class PhotoController {
         if (rootPath.endsWith("/")) rootPath = rootPath.substring(0, rootPath.length() - 1);
         File img = new File(rootPath + imgUrl);
         if (img.exists()) img.delete();
+    }
+
+
+    @RequestMapping(value = "/reacquirePhotoInfo.ms")
+    public String reacquireInfo(@RequestParam("id") String idStr) {
+
+        try {
+
+            Long id = Long.valueOf(idStr);
+            logger.info("手动运行图片信息收集：idStr：\"" + idStr + "\"");
+            bingAllSaveAccessService.reacquireInfo(id);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:/bing";
+    }
+
+
+    @RequestMapping(value = "/sendMail.ms")
+    @ResponseBody
+    public Object sendMail(@RequestParam("id") String idStr) {
+        try {
+            bingAllSaveAccessService.sendMail(Long.valueOf(idStr), BingParam.bing_img_save_path);
+            return ReturnVO.valueOfSuccess();
+
+        } catch (Exception e) {
+
+            logger.error("发送邮件失败", e);
+            return ReturnVO.valueOf(ReturnStatusConsts.SYTSTEM_ERROR, "发送邮件失败：" + e.getMessage());
+        }
     }
 }
