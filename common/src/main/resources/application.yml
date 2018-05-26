@@ -8,6 +8,9 @@ ms:
       local_zone_id: America/New_York
       to_zone_id: GMT+8
     bing:
+      desc_start: 6
+      desc_length: 50
+      desc_regx: (?i)(:?<(style|script).*?>.*?</\2>)|(:?<.*?>)|(:?</.*?>)|[\n\t\s]*
       manage_mail: xxx@xxx.com
       to_mail: xxx@xxx.com,xxx@xxx.com
       acquire_cron_exp: 5 * * * * ?

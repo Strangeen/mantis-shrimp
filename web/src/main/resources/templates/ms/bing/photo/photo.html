@@ -79,14 +79,9 @@
                                     <img th:src="${item.smallImgUrl}" width="100%">
                                 </div>
                                 <div class="panel-footer">
-                                    <a th:href="${item.imgCopyrightLink}" target="_blank"
-                                       th:text="${item.imgCopyright}"></a>&nbsp;
-                                    <!--<span th:if="${item.bDesc != null && item.bDesc.length() > 50}">DESC</span>-->
-                                    <!--<span th:unless="${item.bDesc != null && item.bDesc.length() > 50}">
-                                        <button type="button" class="btn btn-info btn-xs"
-                                                th:text="#{ms.oper.reacquire.photoinfo}"
-                                                th:onclick="'reacquirePhotoInfo(' + ${item.id} + ')'">
-                                    </span>-->
+                                    <p><a th:href="${item.imgCopyrightLink}" target="_blank"
+                                          th:text="${item.imgCopyright}"></a></p>
+                                    <p class="desc" th:text="${item.bDesc}"></p>
                                 </div>
                             </div>
                         </div>
@@ -217,7 +212,7 @@
     }
 
     .panel-heading .mail-icon .fa:hover {
-        color: #1c81ff;
+        color: #337ab7;
     }
 
     .panel-heading .info-icon {
@@ -230,12 +225,16 @@
     }
 
     .panel-heading .info-icon .fa:hover {
-        color: #1c81ff;
+        color: #337ab7;
     }
 
     .panel-footer {
         border: 1px solid #ddd;
         border-top: 0;
+    }
+
+    .panel-footer .desc {
+        color: #666;
     }
 </style>
 

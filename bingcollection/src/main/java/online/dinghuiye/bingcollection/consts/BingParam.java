@@ -41,6 +41,12 @@ public class BingParam {
 
     private String cronZoneId;
 
+    private String descRegx;
+
+    private Integer descStart;
+
+    private Integer descLength;
+
     public static void setLog_page_size(int log_page_size) {
         BingParam.log_page_size = log_page_size;
     }
@@ -107,5 +113,29 @@ public class BingParam {
 
     public void setCronZoneId(String cronZoneId) {
         this.cronZoneId = cronZoneId;
+    }
+
+    public String getDescRegx() {
+        return descRegx;
+    }
+
+    public void setDescRegx(String descRegx) {
+        this.descRegx = descRegx;
+    }
+
+    public Integer getDescStart() {
+        return descStart;
+    }
+
+    public void setDescStart(Integer descStart) {
+        this.descStart = descStart;
+    }
+
+    public Integer getDescLength() {
+        return descLength;
+    }
+
+    public void setDescLength(Integer descLength) {
+        this.descLength = descLength;
     }
 }

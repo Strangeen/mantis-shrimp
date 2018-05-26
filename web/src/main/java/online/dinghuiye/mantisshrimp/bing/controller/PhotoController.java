@@ -29,6 +29,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.UUID;
 
 /**
@@ -42,11 +43,13 @@ public class PhotoController {
 
     private final Access bingAllSaveAccessService;
     private final BingItemService itemService;
+    private final BingParam bingParam;
 
     @Autowired
-    public PhotoController(Access bingAllSaveAccessService, BingItemService itemService) {
+    public PhotoController(Access bingAllSaveAccessService, BingItemService itemService, BingParam bingParam) {
         this.bingAllSaveAccessService = bingAllSaveAccessService;
         this.itemService = itemService;
+        this.bingParam = bingParam;
     }
 
     @RequestMapping("")
@@ -72,6 +75,20 @@ public class PhotoController {
         Page<BingItemEntity> itemPage = itemService.findAll(queryParam, new PageRequest(page, size, new Sort(new Sort.Order(Sort.Direction.DESC, "bDate"))));
         int colNum = BingParam.bing_photo_list_col_num;
         int rowNum = itemPage.getNumberOfElements() % colNum == 0 ? itemPage.getNumberOfElements() / colNum : itemPage.getNumberOfElements() / colNum + 1;
+
+        // format desc and cut desc
+        Iterator<BingItemEntity> it = itemPage.iterator();
+        while (it.hasNext()) {
+            BingItemEntity item = it.next();
+            String desc = item.getbDesc();
+            if (StringUtils.isBlank(desc)) continue;
+            desc = desc.replaceAll(bingParam.getDescRegx(), "");
+            int start = bingParam.getDescStart();
+            int end = bingParam.getDescLength() + bingParam.getDescStart();
+            if (desc.length() > bingParam.getDescLength() + bingParam.getDescStart())
+                desc = desc.substring(start, end) + "...";
+            item.setbDesc(desc);
+        }
 
         model.addAttribute("itemPage", itemPage)
                 .addAttribute("dateFormat", MsParam.date_format)
