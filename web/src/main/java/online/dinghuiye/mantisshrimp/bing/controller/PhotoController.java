@@ -82,12 +82,7 @@ public class PhotoController {
             BingItemEntity item = it.next();
             String desc = item.getbDesc();
             if (StringUtils.isBlank(desc)) continue;
-            desc = desc.replaceAll(bingParam.getDescRegx(), "");
-            int start = bingParam.getDescStart();
-            int end = bingParam.getDescLength() + bingParam.getDescStart();
-            if (desc.length() > bingParam.getDescLength() + bingParam.getDescStart())
-                desc = desc.substring(start, end) + "...";
-            item.setbDesc(desc);
+            item.setbDesc(substrDesc(desc));
         }
 
         model.addAttribute("itemPage", itemPage)
@@ -97,6 +92,16 @@ public class PhotoController {
                 .addAttribute("queryItem", queryItem);
 
         return "ms/bing/photo/photo";
+    }
+
+    private String substrDesc(String desc) {
+        if (desc == null) return null;
+        desc = desc.replaceAll(bingParam.getDescRegx(), "");
+        int start = bingParam.getDescStart();
+        int end = bingParam.getDescLength() + bingParam.getDescStart();
+        if (desc.length() > bingParam.getDescLength() + bingParam.getDescStart())
+            desc = desc.substring(start, end) + "...";
+        return desc;
     }
 
     /**
@@ -156,7 +161,7 @@ public class PhotoController {
     }
 
 
-    @RequestMapping(value = "/reacquirePhotoInfo.ms")
+    /*@RequestMapping(value = "/reacquirePhotoInfo.ms")
     public String reacquireInfo(@RequestParam("id") String idStr) {
 
         try {
@@ -169,10 +174,29 @@ public class PhotoController {
             throw new RuntimeException(e);
         }
         return "redirect:/bing";
+    }*/
+
+
+    @RequestMapping(value = "/reacquirePhotoInfoAjax.ms", method = RequestMethod.POST)
+    @ResponseBody
+    public Object reacquireInfoAjax(@RequestParam("id") String idStr) {
+
+        try {
+
+            Long id = Long.valueOf(idStr);
+            logger.info("手动运行图片信息收集：idStr：\"" + idStr + "\"");
+            String desc = bingAllSaveAccessService.reacquireInfo(id);
+            desc = substrDesc(desc);
+            return ReturnVO.valueOf(ReturnStatusConsts.SUCCESS_STAT, ReturnStatusConsts.SUCCESS_MSG, desc);
+        } catch (Exception e) {
+            logger.error("手动收集图片信息失败", e);
+            return ReturnVO.valueOf(ReturnStatusConsts.SYTSTEM_ERROR,
+                    "手动收集图片信息失败：" + e.getMessage());
+        }
     }
 
 
-    @RequestMapping(value = "/sendMail.ms")
+    @RequestMapping(value = "/sendMail.ms", method = RequestMethod.GET)
     @ResponseBody
     public Object sendMail(@RequestParam("id") String idStr) {
         try {

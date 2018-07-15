@@ -11,14 +11,25 @@ public class ReturnVO {
 
     private int status;
     private String msg;
+    private Object data;
 
     private ReturnVO(int status, String msg) {
         this.status = status;
         this.msg = msg;
     }
 
+    private ReturnVO(int status, String msg, Object data) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
+    }
+
     public static ReturnVO valueOf(int status, String msg) {
         return new ReturnVO(status, msg);
+    }
+
+    public static ReturnVO valueOf(int status, String msg, Object data) {
+        return new ReturnVO(status, msg, data);
     }
 
     public static ReturnVO valueOfSuccess() {
@@ -39,5 +50,13 @@ public class ReturnVO {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 }

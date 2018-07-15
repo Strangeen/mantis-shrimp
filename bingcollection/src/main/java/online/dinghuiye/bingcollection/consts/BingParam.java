@@ -47,6 +47,16 @@ public class BingParam {
 
     private Integer descLength;
 
+    private Integer bingDescPullTimes;
+
+    public Integer getBingDescPullTimes() {
+        return bingDescPullTimes;
+    }
+
+    public void setBingDescPullTimes(Integer bingDescPullTimes) {
+        this.bingDescPullTimes = bingDescPullTimes;
+    }
+
     public static void setLog_page_size(int log_page_size) {
         BingParam.log_page_size = log_page_size;
     }

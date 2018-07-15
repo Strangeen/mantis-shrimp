@@ -25,6 +25,7 @@ ms:
       bing_img_prefix: bing
       bing_small_img_width: 600
       bing_photo_list_col_num: 4
+      bing_desc_pull_times: 15
 
 server:
   port: 9001

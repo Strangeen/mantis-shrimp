@@ -66,7 +66,7 @@
 
                                     <span class="photo-icon info-icon"
                                           th:unless="${item.bDesc != null && item.bDesc.length() > 50}"
-                                          th:onclick="'reacquirePhotoInfo(' + ${item.id} + ')'"><i
+                                          th:onclick="'reacquirePhotoInfoAjax(' + ${item.id} + ', this)'"><i
                                             class="fa fa-tags"></i></span>
 
                                     <span class="photo-icon mail-icon"
@@ -250,9 +250,9 @@
         $('#form').submit();
     }
 
-    function reacquirePhotoInfo(id) {
+    /*function reacquirePhotoInfo(id) {
         window.location.href = '/bing/reacquirePhotoInfo.ms?id=' + id;
-    }
+    }*/
 
     function sendMail(id, btn) {
         $.ajax({
@@ -275,6 +275,32 @@
             },
             complete: function () {
                 $(btn).show();
+            }
+        });
+    }
+
+    function reacquirePhotoInfoAjax(id, btn) {
+        $.ajax({
+            url: '/bing/reacquirePhotoInfoAjax.ms',
+            type: 'post',
+            dataType: 'json',
+            data: {id: id},
+            beforeSend: function () {
+                //alert('正在发送...');
+                $(btn).hide();
+            },
+            success: function (res) {
+                if (res) {
+                    if (res.status == 1 && res.data.length > 50) {
+                        $(btn).parents('.panel').find('.desc').text(res.data);
+                        alert("获取成功")
+                    }
+                    else
+                        $(btn).show();
+                }
+            },
+            error: function () {
+                alert("获取失败");
             }
         });
     }

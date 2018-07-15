@@ -37,17 +37,20 @@ public class Access {
     private final BingItemDao itemDao;
     private final BingLogOper logOper;
     private final MailUtil mailUtil;
+    private final BingParam bingParam;
 
     @Value("${spring.mail.username}")
     private String fromMail;
 
     @Autowired
-    public Access(BingAcquirer acquirer, BingImgSaver saver, BingItemDao itemDao, BingLogOper logOper, MailUtil mailUtil) {
+    public Access(BingAcquirer acquirer, BingImgSaver saver, BingItemDao itemDao,
+                  BingLogOper logOper, MailUtil mailUtil, BingParam bingParam) {
         this.acquirer = acquirer;
         this.saver = saver;
         this.itemDao = itemDao;
         this.logOper = logOper;
         this.mailUtil = mailUtil;
+        this.bingParam = bingParam;
     }
 
     /**
@@ -71,7 +74,8 @@ public class Access {
             StringBuilder msg = new StringBuilder()
                     .append(item.getId()).append(" | ")
                     .append(new SimpleDateFormat(BingParam.bing_date_format).format(item.getbDate()))
-                    .append(" | ").append(item.getbTitle());
+                    .append(" | ").append(item.getbTitle())
+                    .append(" | ").append("desc获取次数：" + descPullCount.get());
             logOper.create("success", msg.toString(), byHand);
 
             // 发送邮件
@@ -127,13 +131,14 @@ public class Access {
      * @param id
      */
     @Transactional
-    public void reacquireInfo(Long id) {
+    public String reacquireInfo(Long id) {
 
         try {
 
             BingItemEntity item = itemDao.findOne(id);
             Date date = item.getbDate();
-            item.setbDesc(acquirer.getBingDesc(date));
+            String desc = acquirer.getBingDesc(date);
+            item.setbDesc(desc);
             itemDao.save(item);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -142,6 +147,8 @@ public class Access {
 
             // 记录日志
             logOper.create("success", id + " | " + dateStr + " | " + title + " | 图片信息获取", true);
+
+            return desc;
 
         } catch (Exception e) {
 
@@ -186,7 +193,19 @@ public class Access {
 //            if (date == null) date = today;
 
             BingItemEntity item = acquirer.getBingImg(date);
-            String desc = acquirer.getBingDesc(date);
+            String desc = "";
+            // TODO: 由于bing有时无法获取desc，多尝试几次
+            //       可能是由于某些地区的bing没有desc功能，网站转发请求又正好转发到这些地区的服务器上造成的
+            int counts = 1;
+            for (; counts <= bingParam.getBingDescPullTimes(); counts ++) {
+                desc = acquirer.getBingDesc(date);
+                if (desc.length() > 50) break;
+            }
+
+            if (desc.length() < 50) throw new BingPullException("pull desc error, too short: " + desc.length());
+
+            // 记录获取desc次数
+            descPullCount.set(counts);
 
             String imgRootPath = imgFile.getImgRootPath();
             File img = new File(
@@ -203,10 +222,19 @@ public class Access {
             return item;
 
         } catch (Exception e) {
+            if (e instanceof BingPullException) {
+                logger.error(e.getMessage(), e);
+                throw e;
+            }
             logger.error("pull image error", e);
             throw new BingPullException(e);
         }
     }
+
+    // 用于向上层传播数据
+    // TODO: 这类问题该如何解决(line204)，方法需要传递2个或以上个数的不相关的结果，并且需要更改已经写好的方法
+    private static final ThreadLocal<Integer> descPullCount = new ThreadLocal<>();
+
 
     private String fixImgLocalUrl(String imgLocalUrl, String imgRootPath) {
         String imgRelativePath = imgLocalUrl.replace("\\", "/").substring(imgRootPath.length());
