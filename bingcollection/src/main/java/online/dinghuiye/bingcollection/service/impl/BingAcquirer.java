@@ -9,6 +9,7 @@ import online.dinghuiye.common.util.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -27,6 +28,13 @@ import java.util.regex.Pattern;
 public class BingAcquirer {
 
     private static final Logger logger = LoggerFactory.getLogger(BingAcquirer.class);
+
+    private BingParam bingParam;
+
+    @Autowired
+    public void setBingParam(BingParam bingParam) {
+        this.bingParam = bingParam;
+    }
 
     public String getBingDesc(Date date) {
         return getBingDesc(date, null);
@@ -111,7 +119,8 @@ public class BingAcquirer {
             BingImageUrlWrapper waper = JSONObject.parseObject(json, BingImageUrlWrapper.class);
 
             BingImageUrlWrapper.Image img = waper.getImages()[0];
-            Pattern pattern = Pattern.compile("^(.*)([\\(（]{1}©.*)$");
+            //Pattern pattern = Pattern.compile("^(.*)([\\(（]{1}©.*)$");
+            Pattern pattern = Pattern.compile(bingParam.getImgTitleRegx());
 
             // img
             Matcher matcher = pattern.matcher(img.getCopyright());

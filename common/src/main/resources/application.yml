@@ -11,6 +11,7 @@ ms:
       desc_start: 6
       desc_length: 50
       desc_regx: (?i)(:?<(style|script).*?>.*?</\2>)|(:?<.*?>)|(:?</.*?>)|[\n\t\s]*
+      img_title_regx: ^(.*)([\(（]{1}.*©.*)$
       manage_mail: xxx@xxx.com
       to_mail: xxx@xxx.com,xxx@xxx.com
       acquire_cron_exp: 5 * * * * ?

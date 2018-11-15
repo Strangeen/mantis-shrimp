@@ -43,6 +43,8 @@ public class BingParam {
 
     private String descRegx;
 
+    private String imgTitleRegx;
+
     private Integer descStart;
 
     private Integer descLength;
@@ -147,5 +149,13 @@ public class BingParam {
 
     public void setDescLength(Integer descLength) {
         this.descLength = descLength;
+    }
+
+    public String getImgTitleRegx() {
+        return imgTitleRegx;
+    }
+
+    public void setImgTitleRegx(String imgTitleRegx) {
+        this.imgTitleRegx = imgTitleRegx;
     }
 }
