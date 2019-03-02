@@ -5,11 +5,11 @@
     <parent>
         <artifactId>mantis-shrimp</artifactId>
         <groupId>online.dinghuiye</groupId>
-        <version>1.2.4</version>
+        <version>1.2.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bing-collection</artifactId>
+    <artifactId>bingcollection</artifactId>
 
     <dependencies>
         <dependency>

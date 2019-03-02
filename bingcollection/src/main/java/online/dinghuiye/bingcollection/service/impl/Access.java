@@ -4,6 +4,7 @@ import online.dinghuiye.bingcollection.consts.BingParam;
 import online.dinghuiye.bingcollection.dao.BingItemDao;
 import online.dinghuiye.bingcollection.entity.BingImageFile;
 import online.dinghuiye.bingcollection.entity.BingPullException;
+import online.dinghuiye.bingcollection.entity.BingPullStatus;
 import online.dinghuiye.bingcollection.pojo.BingItemEntity;
 import online.dinghuiye.common.entity.MailAttachment;
 import online.dinghuiye.common.entity.MailImage;
@@ -75,7 +76,9 @@ public class Access {
                     .append(item.getId()).append(" | ")
                     .append(new SimpleDateFormat(BingParam.bing_date_format).format(item.getbDate()))
                     .append(" | ").append(item.getbTitle())
-                    .append(" | ").append("desc获取次数：" + descPullCount.get());
+                    .append(" | ").append("desc获取次数：").append(bingPullStatus.get().getDescPullCount())
+                    .append("，").append(bingPullStatus.get().isSuccess() ? "成功" : "失败");
+//                    .append(" | ").append("desc获取次数：" + descPullCount.get());
             logOper.create("success", msg.toString(), byHand);
 
             // 发送邮件
@@ -202,10 +205,18 @@ public class Access {
                 if (desc.length() > 50) break;
             }
 
-            if (desc.length() < 50) throw new BingPullException("pull desc error, too short: " + desc.length());
+            BingPullStatus status = new BingPullStatus(counts);
+            if (desc.length() < 50) {
+                // 2019.03.01开始发现貌似取消了desc这个内容了，获取了1、2号的都无法获取到
+                // 将抛错改为记录日志，上面的重试机制依然保留，后面发现可以获取desc了可以手动获取
+//                throw new BingPullException("pull desc error, too short: " + desc.length());
+                logger.error("pull desc error, too short: " + desc.length());
+                status.setSuccess(false);
+            }
 
             // 记录获取desc次数
-            descPullCount.set(counts);
+//            descPullCount.set(counts);
+            bingPullStatus.set(status);
 
             String imgRootPath = imgFile.getImgRootPath();
             File img = new File(
@@ -234,6 +245,7 @@ public class Access {
     // 用于向上层传播数据
     // TODO: 这类问题该如何解决(line204)，方法需要传递2个或以上个数的不相关的结果，并且需要更改已经写好的方法
     private static final ThreadLocal<Integer> descPullCount = new ThreadLocal<>();
+    private static final ThreadLocal<BingPullStatus> bingPullStatus = new ThreadLocal<>();
 
 
     private String fixImgLocalUrl(String imgLocalUrl, String imgRootPath) {
