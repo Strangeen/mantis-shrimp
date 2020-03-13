@@ -72,13 +72,15 @@ public class Access {
             item = bing(date, imgFile, smallWidth);
 
             // 记录日志
+            int descPullCount = bingPullStatus.get().getDescPullCount();
             StringBuilder msg = new StringBuilder()
                     .append(item.getId()).append(" | ")
                     .append(new SimpleDateFormat(BingParam.bing_date_format).format(item.getbDate()))
                     .append(" | ").append(item.getbTitle())
-                    .append(" | ").append("desc获取次数：").append(bingPullStatus.get().getDescPullCount())
-                    .append("，").append(bingPullStatus.get().isSuccess() ? "成功" : "失败");
-//                    .append(" | ").append("desc获取次数：" + descPullCount.get());
+                    .append(" | ").append("desc获取次数：").append(descPullCount);
+            if (descPullCount > 0) {
+                msg.append("，").append("获取").append(bingPullStatus.get().isSuccess() ? "成功" : "失败");
+            }
             logOper.create("success", msg.toString(), byHand);
 
             // 发送邮件
@@ -116,7 +118,8 @@ public class Access {
 
     /**
      * 发送邮件
-     * @param id item的id
+     *
+     * @param id          item的id
      * @param imgRootPath 图片存储目录
      */
     public void sendMail(Long id, String imgRootPath) {
@@ -131,6 +134,7 @@ public class Access {
 
     /**
      * 获取图片信息(DESC)
+     *
      * @param id
      */
     @Transactional
@@ -199,14 +203,15 @@ public class Access {
             String desc = "";
             // TODO: 由于bing有时无法获取desc，多尝试几次
             //       可能是由于某些地区的bing没有desc功能，网站转发请求又正好转发到这些地区的服务器上造成的
-            int counts = 1;
-            for (; counts <= bingParam.getBingDescPullTimes(); counts ++) {
+            int counts = 0;
+            for (; counts < bingParam.getBingDescPullTimes(); counts++) {
                 desc = acquirer.getBingDesc(date);
+                logger.info("图片info：" + desc);
                 if (desc.length() > 50) break;
             }
 
             BingPullStatus status = new BingPullStatus(counts);
-            if (desc.length() < 50) {
+            if (counts > 0 && desc.length() < 50) {
                 // 2019.03.01开始发现貌似取消了desc这个内容了，获取了1、2号的都无法获取到
                 // 将抛错改为记录日志，上面的重试机制依然保留，后面发现可以获取desc了可以手动获取
 //                throw new BingPullException("pull desc error, too short: " + desc.length());
